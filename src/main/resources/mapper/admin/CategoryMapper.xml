@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.mall.server.admin.mapper.CategoryMapper">
+
+
+    <select id="page" resultType="com.net.mall.pojo.vo.CategoryVO">
+        select * from `net-mall`.category
+    </select>
+
+    <select id="list" resultType="com.net.mall.pojo.vo.CategoryVO">
+        select * from `net-mall`.category
+    </select>
+
+</mapper>
