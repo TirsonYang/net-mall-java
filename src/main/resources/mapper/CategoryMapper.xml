@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.mall.server.boss.mapper.CategoryMapper">
+
+
+    <insert id="add">
+        insert into `net-mall`.category (id,category_name, description, create_time, update_time, create_user, update_user)
+        values (#{id},#{categoryName}, #{description}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+    </insert>
+
+    <update id="update">
+        update `net-mall`.category
+            <set>
+                <if test="categoryName!=null">
+                    category_name = #{categoryName},
+                </if>
+                <if test="description!=null">
+                    description = #{description},
+                </if>
+                <if test="updateTime!=null">
+                    update_time = #{updateTime},
+                </if>
+                <if test="categoryName!=null">
+                    update_user = #{updateUser},
+                </if>
+            </set>
+
+    </update>
+</mapper>
