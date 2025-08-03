@@ -1,5 +1,22 @@
+server:
+  port: 8080
+
 spring:
+  profiles:
+    active: dev
   datasource:
     url: ${datasource.url}
     username: ${datasource.username}
     password: ${datasource.password}
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.net.mall.entity
+
+# application.yml（可选配置）
+pagehelper:
+  helper-dialect: mysql  # 指定数据库方言
+  reasonable: true      # 合理分页（页码小于1时返回第一页，大于最大页时返回最后一页）
+  support-methods-arguments: true
+  params: count=countSql

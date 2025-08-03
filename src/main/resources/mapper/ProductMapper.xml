@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.mall.server.boss.mapper.ProductMapper">
+
+    <!--添加商品-->
+    <insert id="add">
+        insert into `net-mall`.product (id,product_name, description, price, category_id, status, image_url, stock, create_time, update_time, create_user, update_user)
+        values (#{id},#{productName}, #{description}, #{price}, #{categoryId}, #{status}, #{imageUrl}, #{stock}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+    </insert>
+
+    <!--修改商品-->
+    <update id="update">
+        update `net-mall`.product
+            <set>
+                <if test="productName!=null">
+                    product_name = #{productName},
+                </if>
+                <if test="description!=null">
+                    description = #{description},
+                </if>
+                <if test="price!=null">
+                    price = #{price},
+                </if>
+                <if test="categoryId!=null">
+                    category_id = #{categoryId},
+                </if>
+                <if test="status!=null">
+                    status = #{status},
+                </if>
+                <if test="imageUrl!=null">
+                    image_url = #{imageUrl},
+                </if>
+                <if test="stock!=null">
+                    stock = #{stock},
+                </if>
+            </set>
+        where id= #{id}
+    </update>
+
+    <!--删除商品-->
+    <delete id="delete">
+        delete from `net-mall`.product where id= #{id}
+    </delete>
+
+    <!--根据分类id查询商品-->
+    <select id="page" resultType="com.net.mall.pojo.vo.ProductVO">
+        select * from `net-mall`.product where category_id=#{categoryId}
+    </select>
+
+
+</mapper>
