@@ -13,6 +13,8 @@ mybatis:
   #mapper配置文件
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.net.mall.entity
+  configuration:
+    map-underscore-to-camel-case: true
 
 # application.yml（可选配置）
 pagehelper:

@@ -3,11 +3,13 @@
 <mapper namespace="com.net.mall.server.boss.mapper.CategoryMapper">
 
 
+    <!--添加分类-->
     <insert id="add">
         insert into `net-mall`.category (id,category_name, description, create_time, update_time, create_user, update_user)
         values (#{id},#{categoryName}, #{description}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
     </insert>
 
+    <!--修改分类-->
     <update id="update">
         update `net-mall`.category
             <set>
@@ -28,10 +30,18 @@
 
     </update>
 
+    <!--删除分类-->
     <delete id="delete">
         delete from `net-mall`.category where id=#{id}
     </delete>
+
+    <!--分页查询-->
     <select id="page" resultType="com.net.mall.pojo.vo.CategoryVO">
+        select * from `net-mall`.category
+    </select>
+
+    <!--列表查询-->
+    <select id="list" resultType="com.net.mall.pojo.vo.CategoryVO">
         select * from `net-mall`.category
     </select>
 </mapper>

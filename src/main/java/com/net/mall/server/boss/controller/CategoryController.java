@@ -5,10 +5,13 @@ import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.result.Result;
 import com.net.mall.pojo.dto.CategoryDTO;
+import com.net.mall.pojo.vo.CategoryVO;
 import com.net.mall.server.boss.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 /**
@@ -73,4 +76,15 @@ public class CategoryController {
         PageResult page=categoryService.page(query);
         return Result.success(page);
     }
+
+    /**
+     * 列表查询商品分类
+     * @return
+     */
+    @GetMapping("/list")
+    public Result<List<CategoryVO>> list(){
+        List<CategoryVO> list=categoryService.list();
+        return Result.success(list);
+    }
+
 }

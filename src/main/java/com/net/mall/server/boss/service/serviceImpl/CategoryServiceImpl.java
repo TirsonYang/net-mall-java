@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -53,5 +55,10 @@ public class CategoryServiceImpl implements CategoryService {
         PageHelper.startPage(query.getPage(),query.getPageSize());
         Page<CategoryVO> page=categoryMapper.page(query);
         return new PageResult(page.getTotal(),page.getResult());
+    }
+
+    @Override
+    public List<CategoryVO> list() {
+        return categoryMapper.list();
     }
 }

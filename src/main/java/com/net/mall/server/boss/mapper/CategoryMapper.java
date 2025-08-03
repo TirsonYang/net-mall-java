@@ -6,6 +6,8 @@ import com.net.mall.pojo.entity.CategoryEntity;
 import com.net.mall.pojo.vo.CategoryVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface CategoryMapper {
     void add(CategoryEntity entity);
@@ -15,4 +17,6 @@ public interface CategoryMapper {
     void delete(Long id);
 
     Page<CategoryVO> page(PageQuery query);
+
+    List<CategoryVO> list();
 }
