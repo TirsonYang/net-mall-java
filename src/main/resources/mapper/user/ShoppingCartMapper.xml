@@ -2,5 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.net.mall.server.user.mapper.ShoppingCartMapper">
 
+    <insert id="add">
 
+    </insert>
+    <update id="update">
+        update `net-mall`.shopping_cart
+        <set>
+            <if test="productName!=null">
+                product_name = #{productName},
+            </if>
+            <if test="imageUrl!=null">
+                image_url = #{imageUrl},
+            </if>
+            <if test="number!=null">
+                number = #{number},
+            </if>
+            <if test="amount!=null">
+                amount = #{amount},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete">
+        delete from `net-mall`.shopping_cart where id=#{id}
+    </delete>
+
+    <delete id="clear">
+        delete from `net-mall`.shopping_cart where user_id=#{userId}
+    </delete>
+
+
+    <select id="getByUserIdAndProductId" resultType="com.net.mall.pojo.entity.ShoppingCartEntity">
+        select * from `net-mall`.shopping_cart where user_id=#{userId} and product_id=#{productId}
+    </select>
+
+
+    <select id="list" resultType="com.net.mall.pojo.vo.ShoppingCartVO">
+        select * from `net-mall`.shopping_cart where user_id=1
+    </select>
 </mapper>

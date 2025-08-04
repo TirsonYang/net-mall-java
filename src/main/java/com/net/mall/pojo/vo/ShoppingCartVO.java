@@ -1,4 +1,4 @@
-package com.net.mall.pojo.dto;
+package com.net.mall.pojo.vo;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-public class ShoppingCartDTO implements Serializable {
+public class ShoppingCartVO implements Serializable {
 
     /**
      * id
@@ -36,6 +36,5 @@ public class ShoppingCartDTO implements Serializable {
     /**
      * 商品单价
      */
-    private BigDecimal price;
-
+    private BigDecimal amount;
 }

@@ -1,12 +1,13 @@
-package com.net.mall.pojo.dto;
+package com.net.mall.pojo.entity;
 
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
-public class ShoppingCartDTO implements Serializable {
+public class ShoppingCartEntity implements Serializable {
 
     /**
      * id
@@ -36,6 +37,21 @@ public class ShoppingCartDTO implements Serializable {
     /**
      * 商品单价
      */
-    private BigDecimal price;
+    private BigDecimal amount;
+
+    /**
+     * 会员id
+     */
+    private Long userId;
+
+    /**
+     * 电脑id
+     */
+    private Long computerId;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
 
 }
