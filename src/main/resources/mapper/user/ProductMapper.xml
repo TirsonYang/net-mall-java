@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.mall.server.user.mapper.ProductMapper">
+
+
+    <select id="page" resultType="com.net.mall.pojo.vo.ProductVO">
+        select * from `net-mall`.product where category_id=#{categoryId}
+    </select>
+</mapper>

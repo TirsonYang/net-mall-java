@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 高级管理订单管理控制器
  */
-@RestController
+@RestController("bossOrdersController")
 @RequestMapping("/boss/orders")
 @Slf4j
 public class OrdersController {

@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 前台端分类管理控制器
  */
-@RestController
+@RestController("adminCategoryController")
 @RequestMapping("/admin/category")
 @Slf4j
 public class CategoryController {
@@ -27,6 +27,11 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * 分类分页查询
+     * @param query
+     * @return
+     */
     @GetMapping("/page")
     public Result<PageResult> page(@RequestBody PageQuery query){
         log.info("前台分页查询分类：{}",query);
@@ -35,6 +40,10 @@ public class CategoryController {
     }
 
 
+    /**
+     * 分类列表查询
+     * @return
+     */
     @GetMapping("/list")
     public Result<List<CategoryVO>> list(){
         log.info("前台列表查询分类");

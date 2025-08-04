@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 前台端商品管理控制器
  */
-@RestController
+@RestController("adminProductController")
 @RequestMapping("/admin/product")
 @Slf4j
 public class ProductController {
@@ -24,6 +24,12 @@ public class ProductController {
     private ProductService productService;
 
 
+    /**
+     * 前台端分页查询商品
+     * @param query
+     * @param categoryId
+     * @return
+     */
     @GetMapping("/page")
     public Result<PageResult> page(@RequestBody PageQuery query, @RequestParam Long categoryId){
         log.info("前台分页查询分类为:{}的{}",categoryId,query);
@@ -31,6 +37,11 @@ public class ProductController {
         return Result.success(page);
     }
 
+    /**
+     * 前台端列表查询商品
+     * @param categoryId
+     * @return
+     */
     @GetMapping("/list")
     public Result<List<ProductVO>> list(@RequestParam Long categoryId){
         log.info("前台查询分类为:{}的商品",categoryId);
@@ -38,6 +49,12 @@ public class ProductController {
         return Result.success(list);
     }
 
+    /**
+     * 前台端更新商品库存
+     * @param id
+     * @param stock
+     * @return
+     */
     @PostMapping("/updateStock")
     public Result updateStock(@RequestParam Long id,@RequestParam Integer stock){
         log.info("前台更新商品id为:{}的库存为:{}",id,stock);

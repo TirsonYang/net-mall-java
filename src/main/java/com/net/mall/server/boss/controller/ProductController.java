@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 高级管理员商品管理控制器
  */
-@RestController
+@RestController("bossProductController")
 @RequestMapping("/boss/product")
 @Slf4j
 public class ProductController {

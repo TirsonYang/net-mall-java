@@ -10,7 +10,7 @@ import com.net.mall.server.admin.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("adminOrdersService")
 public class OrdersServiceImpl implements OrdersService {
 
     @Autowired

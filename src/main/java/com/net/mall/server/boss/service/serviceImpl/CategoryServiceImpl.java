@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-@Service
+@Service("bossCategoryService")
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired

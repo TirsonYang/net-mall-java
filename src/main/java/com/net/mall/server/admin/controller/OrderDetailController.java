@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+
+/**
+ * 前台端订单详情控制器
+ */
+@RestController("adminOrderDetailController")
 @RequestMapping("/admin/orderDetail")
 @Slf4j
 public class OrderDetailController {
@@ -20,6 +24,12 @@ public class OrderDetailController {
     @Autowired
     private OrderDetailService orderDetailService;
 
+    /**
+     * 前台端分页订单详情
+     * @param query
+     * @param orderId
+     * @return
+     */
     @GetMapping("/page")
     public Result<PageResult> page(@RequestBody PageQuery query, @RequestParam Long orderId){
         log.info("前台分页查询订单详情：{}{}",orderId,query);
@@ -27,6 +37,11 @@ public class OrderDetailController {
         return Result.success(page);
     }
 
+    /**
+     * 前台端列表查询订单详情
+     * @param orderId
+     * @return
+     */
     @GetMapping("/list")
     public Result<List<OrderDetailVO>> list(@RequestParam Long orderId){
         log.info("前台查询订单详情：{}",orderId);

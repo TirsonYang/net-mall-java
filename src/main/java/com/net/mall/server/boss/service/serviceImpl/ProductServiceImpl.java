@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-@Service
+@Service("bossProductService")
 public class ProductServiceImpl implements ProductService {
 
     @Autowired

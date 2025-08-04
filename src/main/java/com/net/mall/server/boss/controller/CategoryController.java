@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 高级管理商品分类控制器
  */
-@RestController
+@RestController("bossCategoryController")
 @RequestMapping("/boss/category")
 @Slf4j
 public class CategoryController {

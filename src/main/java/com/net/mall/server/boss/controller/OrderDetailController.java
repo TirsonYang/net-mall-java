@@ -16,7 +16,7 @@ import java.util.List;
  * 高级管理订单详情控制器
  */
 
-@RestController
+@RestController("bossOrderDetailController")
 @RequestMapping("/boss/orderDetail")
 @Slf4j
 public class OrderDetailController {
