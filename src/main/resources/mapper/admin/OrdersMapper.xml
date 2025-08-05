@@ -3,7 +3,7 @@
 <mapper namespace="com.net.mall.server.admin.mapper.OrdersMapper">
 
     <update id="finish">
-        update `net-mall`.orders set status=3 where id=#{id}
+        update `net-mall`.orders set status=3,delivery_time=#{now} where id=#{id}
     </update>
 
 

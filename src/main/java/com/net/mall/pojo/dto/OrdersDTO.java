@@ -64,30 +64,5 @@ public class OrdersDTO implements Serializable {
      */
     private BigDecimal amount;
 
-    /**
-     * 备注
-     */
-    private String remark;
-
-    /**
-     * 下单手机号
-     */
-    private String phone;
-
-    /**
-     * 取消原因
-     */
-    private String cancelReason;
-
-    /**
-     * 取消时间
-     */
-    private LocalDateTime cancelTime;
-
-    /**
-     * 送达时间
-     */
-    private LocalDateTime deliveryTime;
-
 
 }

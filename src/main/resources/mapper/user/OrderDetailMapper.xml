@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.mall.server.user.mapper.OrderDetailMapper">
+
+    <insert id="add">
+        insert into `net-mall`.order_detail (order_id,product_id,product_name,image_url,quantity,amount)
+        values(#{orderId},#{productId},#{productName},#{imageUrl},#{quantity},#{amount})
+    </insert>
+
+
+    <select id="list" resultType="com.net.mall.pojo.vo.OrdersVO">
+        select * from `net-mall`.order_detail where order_id=#{orderId}
+    </select>
+</mapper>

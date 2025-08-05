@@ -6,6 +6,8 @@ import com.net.mall.pojo.vo.OrdersVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Mapper
 @Component("adminOrdersMapper")
 public interface OrdersMapper {
@@ -13,5 +15,5 @@ public interface OrdersMapper {
 
     Page<OrdersVO> page(PageQuery query);
 
-    void finish(Long id);
+    void finish(Long id, LocalDateTime time);
 }

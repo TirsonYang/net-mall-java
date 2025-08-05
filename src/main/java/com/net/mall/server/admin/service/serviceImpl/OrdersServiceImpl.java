@@ -10,6 +10,8 @@ import com.net.mall.server.admin.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service("adminOrdersService")
 public class OrdersServiceImpl implements OrdersService {
 
@@ -24,6 +26,7 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public void finish(Long id) {
-        ordersMapper.finish(id);
+        LocalDateTime now=LocalDateTime.now();
+        ordersMapper.finish(id,now);
     }
 }
