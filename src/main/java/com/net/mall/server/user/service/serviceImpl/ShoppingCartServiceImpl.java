@@ -1,5 +1,6 @@
 package com.net.mall.server.user.service.serviceImpl;
 
+import com.net.mall.common.context.BaseContext;
 import com.net.mall.pojo.dto.ShoppingCartDTO;
 import com.net.mall.pojo.entity.ProductEntity;
 import com.net.mall.pojo.entity.ShoppingCartEntity;
@@ -67,7 +68,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void clear() {
-        Long userId=1L;
+        Long userId= BaseContext.getCurrentUserId();
         shoppingCartMapper.clear(userId);
     }
 

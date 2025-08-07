@@ -60,7 +60,6 @@ public class ShoppingCartController {
 
     @DeleteMapping("/clear")
     public Result clear(){
-        //TODO 登录功能完成后，获取当前用户id,根据userId清空购物车
         log.info("清空购物车");
         shoppingCartService.clear();
         return Result.success();

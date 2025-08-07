@@ -2,6 +2,7 @@ package com.net.mall.server.boss.service.serviceImpl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.net.mall.common.context.BaseContext;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.pojo.dto.CategoryDTO;
@@ -29,9 +30,8 @@ public class CategoryServiceImpl implements CategoryService {
         BeanUtils.copyProperties(dto,entity);
         entity.setCreateTime(LocalDateTime.now());
         entity.setUpdateTime(LocalDateTime.now());
-        //TODO 登录功能后设置创建用户和修改用户
-        entity.setCreateUser(1L);
-        entity.setUpdateUser(1L);
+        entity.setCreateUser(BaseContext.getCurrentUserId());
+        entity.setUpdateUser(BaseContext.getCurrentUserId());
         categoryMapper.add(entity);
     }
 
@@ -40,8 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryEntity entity = new CategoryEntity();
         BeanUtils.copyProperties(dto,entity);
         entity.setUpdateTime(LocalDateTime.now());
-        //TODO 登录功能后设置修改用户
-        entity.setUpdateUser(1L);
+        entity.setUpdateUser(BaseContext.getCurrentUserId());
         categoryMapper.update(entity);
     }
 
