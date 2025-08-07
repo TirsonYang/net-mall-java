@@ -22,3 +22,13 @@ pagehelper:
   reasonable: true      # 合理分页（页码小于1时返回第一页，大于最大页时返回最后一页）
   support-methods-arguments: true
   params: count=countSql
+
+net:
+  mall:
+    jwt:
+      admin-secret-key:  ${jwt.admin-secret-key}
+      admin-token-name: ${jwt.admin-token-name}
+      admin-ttl:   ${jwt.admin-ttl}
+      boss-secret-key: ${jwt.boss-secret-key}
+      boss-token-name: ${jwt.boss-token-name}
+      boss-ttl: ${jwt.boss-ttl}
