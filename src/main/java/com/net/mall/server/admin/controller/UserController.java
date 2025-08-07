@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,9 +40,13 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public Result<UserVO> login(@RequestBody UserDTO dto){
+    public Result<UserVO> login(@RequestBody UserDTO dto, HttpServletRequest request){
 
         UserEntity entity=userService.login(dto);
+
+//        HttpSession session = request.getSession();
+//
+//        session.setAttribute("admin","ADMIN");
 
         if (entity==null){
             return Result.error("用户不存在");
@@ -60,6 +66,11 @@ public class UserController {
         vo.setToken(token);
 
         return Result.success(vo);
+    }
+
+    @PostMapping("/logout")
+    public Result logout(){
+        return Result.success();
     }
 
 }

@@ -9,9 +9,12 @@ import com.net.mall.pojo.vo.UserVO;
 import com.net.mall.server.boss.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,12 +28,16 @@ public class UserController implements Serializable{
     @Autowired
     private JwtProperty jwtProperty;
 
-    public Result<UserVO> login(@RequestBody UserDTO dto){
+    public Result<UserVO> login(@RequestBody UserDTO dto, HttpServletRequest request){
         UserEntity entity=userService.login(dto);
 
         if (entity==null){
             return Result.error("用户不存在");
         }
+
+//        HttpSession session = request.getSession();
+//
+//        session.setAttribute("boss","BOSS");
 
         Map<String,Object> claims=new HashMap<>();
         claims.put("bossId",entity.getId());
@@ -44,6 +51,12 @@ public class UserController implements Serializable{
 
         return Result.success(vo);
 
+    }
+
+
+    @PostMapping("/logout")
+    public Result logout(){
+        return Result.success();
     }
 
 }
