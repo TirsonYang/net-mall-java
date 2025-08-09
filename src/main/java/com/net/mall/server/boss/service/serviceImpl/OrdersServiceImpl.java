@@ -4,11 +4,14 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
+import com.net.mall.pojo.entity.OrdersEntity;
 import com.net.mall.pojo.vo.OrdersVO;
 import com.net.mall.server.boss.mapper.OrdersMapper;
 import com.net.mall.server.boss.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("bossOrdersService")
 public class OrdersServiceImpl implements OrdersService {
@@ -26,5 +29,10 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public void updateStatus(Long id, Integer status) {
         ordersMapper.updateStatus(id,status);
+    }
+
+    @Override
+    public List<OrdersEntity> getListByStatus(Integer status) {
+        return ordersMapper.getListByStatus(status);
     }
 }

@@ -10,4 +10,8 @@
     <select id="page" resultType="com.net.mall.pojo.vo.OrdersVO">
         select * from `net-mall`.orders
     </select>
+
+    <select id="getListByStatus" resultType="com.net.mall.pojo.entity.OrdersEntity">
+        select * from `net-mall`.orders where status=#{status}
+    </select>
 </mapper>
