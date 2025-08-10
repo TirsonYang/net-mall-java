@@ -4,16 +4,20 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
+import com.net.mall.common.utils.ExcelUtil;
 import com.net.mall.pojo.entity.OrdersEntity;
 import com.net.mall.pojo.vo.OrdersVO;
 import com.net.mall.server.boss.mapper.OrdersMapper;
 import com.net.mall.server.boss.service.OrdersService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Service("bossOrdersService")
+@Slf4j
 public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
@@ -35,4 +39,20 @@ public class OrdersServiceImpl implements OrdersService {
     public List<OrdersEntity> getListByStatus(Integer status) {
         return ordersMapper.getListByStatus(status);
     }
+
+
+
+    @Override
+    public void export(HttpServletResponse response) {
+        List<OrdersVO> list = list();
+        log.info("list:{}",list);
+        ExcelUtil.exportMonth(response,list);
+    }
+
+    public List<OrdersVO> list(){
+        List<OrdersVO> list=ordersMapper.list();
+        return list;
+    }
+
+
 }

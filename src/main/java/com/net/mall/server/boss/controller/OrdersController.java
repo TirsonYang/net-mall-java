@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 高级管理订单管理控制器
  */
@@ -42,6 +44,11 @@ public class OrdersController {
     public Result updateStatus(@RequestParam Long id,@RequestParam Integer status){
         ordersService.updateStatus(id,status);
         return Result.success();
+    }
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response){
+        ordersService.export(response);
     }
 
 }

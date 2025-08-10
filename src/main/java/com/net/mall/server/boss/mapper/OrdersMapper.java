@@ -18,4 +18,6 @@ public interface OrdersMapper {
     void updateStatus(Long id, Integer status);
 
     List<OrdersEntity> getListByStatus(Integer status);
+
+    List<OrdersVO> list();
 }
