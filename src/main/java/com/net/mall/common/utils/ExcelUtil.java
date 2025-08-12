@@ -25,116 +25,113 @@ import java.util.zip.ZipOutputStream;
 @Slf4j
 public class ExcelUtil {
 
-    public static void exportMonth(HttpServletResponse response, List<OrdersVO> list){
+    public static void export(HttpServletResponse response, List<OrdersVO> list, LocalDateTime startTime, LocalDateTime endTime) {
 
         String fileName = null;
         try {
-            fileName = URLEncoder.encode("订单Excel表格.zip","UTF-8");
+            fileName = URLEncoder.encode("订单Excel表格.zip", "UTF-8");
         } catch (UnsupportedEncodingException e) {
             log.error("导出失败！");
         }
 
         response.setContentType("application/zip");
         response.setCharacterEncoding("utf-8");
-        response.setHeader("Content-Disposition","attachment;filename="+fileName);
-        Year now = Year.now();
-        List<OrdersVO> resList = list.stream()
-                .filter(e -> e.getOrderTime().getYear() == Year.now().getValue())
-                .collect(Collectors.toList());
-        try(ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
-            for (int j=0;j<12;j++) {
-                // 工作簿对象
-                XSSFWorkbook workbook = new XSSFWorkbook();
-                // 样式对象
-                XSSFCellStyle cellStyle = workbook.createCellStyle();
-                // 水平居中
-                cellStyle.setAlignment(HorizontalAlignment.CENTER);
-                // 垂直居中
-                cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
+            // 工作簿对象
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            // 样式对象
+            XSSFCellStyle cellStyle = workbook.createCellStyle();
+            // 水平居中
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            // 垂直居中
+            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
-                Month month = Month.of(j + 1);
-                XSSFSheet sheet = workbook.createSheet();
-                XSSFRow title = sheet.createRow(0);
+            //TODO 标题行高度增加，字体大小增加，表头字体加粗，表尾计算金额
+            //TODO 测试：是否按时间成功过滤
 
-                // 标题
-                XSSFCell headersCell = title.createCell(0);
-                headersCell.setCellStyle(cellStyle);
-                headersCell.setCellValue("点一点" + month.getValue() + "月订单");
-                sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 10));
-                // 表头
-                XSSFRow row1 = sheet.createRow(1);
-                String[] headers = {"订单编号", "订单状态", "下单用户id", "机位id", "下单时间", "支付时间", "支付方式", "实际总价", "优惠金额", "原始价格", "下单手机号"};
-                for (int i = 0; i < headers.length; i++) {
-                    // 填充表头
-                    row1.createCell(i).setCellValue(headers[i]);
-                    // 列宽自适应
-                    // TODO 列宽自适应需要调整
-                    sheet.autoSizeColumn(i);
-                }
-                //记录行数
-                int k = 0;
-                for (OrdersVO vo : resList) {
-                    if (vo.getOrderTime().getMonth().getValue() == month.getValue()) {
-                        XSSFRow row = sheet.createRow(k + 2);
-                        row.createCell(0).setCellValue(vo.getOrderNum());
-                        row.createCell(1).setCellValue(switchStatus(vo.getStatus()));
-                        row.createCell(2).setCellValue(vo.getUserId());
-                        row.createCell(3).setCellValue(vo.getComputerId());
-                        row.createCell(4).setCellValue(vo.getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                        if (vo.getCheckoutTime() == null) {
-                            row.createCell(5).setCellValue("/");
-                        } else {
-                            row.createCell(5).setCellValue(vo.getCheckoutTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                        }
-                        row.createCell(6).setCellValue(switchPayMethod(vo.getPayMethod()));
-                        row.createCell(7).setCellValue(vo.getTotal().toString());
-                        row.createCell(8).setCellValue(vo.getPreference().toString());
-                        row.createCell(9).setCellValue(vo.getAmount().toString());
-                        row.createCell(10).setCellValue(vo.getPhone());
-                        k++;
-                    }
-                }
-                String entryName = "点一点" + month.getValue() + "月订单.xlsx";
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            XSSFSheet sheet = workbook.createSheet();
+            XSSFRow title = sheet.createRow(0);
 
-                workbook.write(bos);
-                ZipEntry zipEntry = new ZipEntry(entryName);
-                zipOutputStream.putNextEntry(zipEntry);
-                zipOutputStream.write(bos.toByteArray());
-                zipOutputStream.closeEntry();
+            sheet.setColumnWidth(0,4000); //订单编号
+            sheet.setColumnWidth(1,2500); //订单状态
+            sheet.setColumnWidth(2,3000); //下单用户id
+            sheet.setColumnWidth(3,2000); //机位id
+            sheet.setColumnWidth(4,5000); //下单时间
+            sheet.setColumnWidth(5,5000); //支付时间
+            sheet.setColumnWidth(6,3000); //支付方式
+            sheet.setColumnWidth(7,3000); //实际总价
+            sheet.setColumnWidth(8,3000); //优惠金额
+            sheet.setColumnWidth(9,3000); //原始价格
+            sheet.setColumnWidth(10,3500); //下单手机号
+            // 标题
+            XSSFCell headersCell = title.createCell(0);
+            headersCell.setCellStyle(cellStyle);
+            headersCell.setCellValue("点一点 " + startTime.toString() + " - " + endTime.toString() + " 订单");
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 10));
+            // 表头
+            XSSFRow row1 = sheet.createRow(1);
+            String[] headers = {"订单编号", "订单状态", "下单用户id", "机位id", "下单时间", "支付时间", "支付方式", "实际总价", "优惠金额", "原始价格", "下单手机号"};
+            for (int i = 0; i < headers.length; i++) {
+                // 填充表头
+                row1.createCell(i).setCellValue(headers[i]);
             }
+            for (int i=0;i<list.size();i++) {
+                XSSFRow row = sheet.createRow(i + 2);
+                row.createCell(0).setCellValue(list.get(i).getOrderNum());
+                row.createCell(1).setCellValue(switchStatus(list.get(i).getStatus()));
+                row.createCell(2).setCellValue(list.get(i).getUserId());
+                row.createCell(3).setCellValue(list.get(i).getComputerId());
+                row.createCell(4).setCellValue(list.get(i).getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                if (list.get(i).getCheckoutTime() == null) {
+                    row.createCell(5).setCellValue("/");
+                } else {
+                    row.createCell(5).setCellValue(list.get(i).getCheckoutTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                }
+                row.createCell(6).setCellValue(switchPayMethod(list.get(i).getPayMethod()));
+                row.createCell(7).setCellValue(list.get(i).getTotal().toString());
+                row.createCell(8).setCellValue(list.get(i).getPreference().toString());
+                row.createCell(9).setCellValue(list.get(i).getAmount().toString());
+                row.createCell(10).setCellValue(list.get(i).getPhone());
+        }
+            String entryName = "点一点订单.xlsx";
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            workbook.write(bos);
+            ZipEntry zipEntry = new ZipEntry(entryName);
+            zipOutputStream.putNextEntry(zipEntry);
+            zipOutputStream.write(bos.toByteArray());
+            zipOutputStream.closeEntry();
             zipOutputStream.finish();
-        } catch (Exception e) {
-            throw new BaseException("导出失败！");
-        }
-
+    } catch(Exception e){
+        throw new BaseException("导出失败！");
     }
+}
 
 
-    private static String switchStatus(Integer i){
-        switch (i){
-            case 1:
-                return "待付款";
-            case 2:
-                return "已付款";
-            case 3:
-                return "已完成";
-            case 4:
-                return "已取消";
-            default:
-                return "/";
-        }
+private static String switchStatus(Integer i) {
+    switch (i) {
+        case 1:
+            return "待付款";
+        case 2:
+            return "已付款";
+        case 3:
+            return "已完成";
+        case 4:
+            return "已取消";
+        default:
+            return "/";
     }
+}
 
-    private static String switchPayMethod(Integer i){
-        switch (i){
-            case 1:
-                return "微信";
-            case 2:
-                return "支付宝";
-            default:
-                return "/";
-        }
+private static String switchPayMethod(Integer i) {
+    switch (i) {
+        case 1:
+            return "微信";
+        case 2:
+            return "支付宝";
+        default:
+            return "/";
     }
+}
 
 }

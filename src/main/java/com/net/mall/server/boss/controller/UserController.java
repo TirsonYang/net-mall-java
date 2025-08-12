@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController("bossUserController")
+@RequestMapping("/boss/user")
 public class UserController implements Serializable{
 
     @Autowired
@@ -28,6 +30,7 @@ public class UserController implements Serializable{
     @Autowired
     private JwtProperty jwtProperty;
 
+    @PostMapping("/login")
     public Result<UserVO> login(@RequestBody UserDTO dto, HttpServletRequest request){
         UserEntity entity=userService.login(dto);
 

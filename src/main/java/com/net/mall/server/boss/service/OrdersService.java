@@ -6,6 +6,7 @@ import com.net.mall.pojo.entity.OrdersEntity;
 import com.net.mall.pojo.vo.OrdersVO;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrdersService {
@@ -15,7 +16,7 @@ public interface OrdersService {
 
     List<OrdersEntity> getListByStatus(Integer status);
 
-    void export(HttpServletResponse response);
+    void export(HttpServletResponse response, String startTime,String endTime);
 
-    List<OrdersVO> list();
+    List<OrdersVO> list(LocalDateTime startTime,LocalDateTime endTime);
 }

@@ -7,6 +7,7 @@ import com.net.mall.pojo.vo.OrdersVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -19,5 +20,5 @@ public interface OrdersMapper {
 
     List<OrdersEntity> getListByStatus(Integer status);
 
-    List<OrdersVO> list();
+    List<OrdersVO> list(LocalDateTime startTime,LocalDateTime endTime);
 }

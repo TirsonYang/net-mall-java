@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 
 /**
  * 高级管理订单管理控制器
@@ -47,8 +48,8 @@ public class OrdersController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response){
-        ordersService.export(response);
+    public void export(HttpServletResponse response, @RequestParam String startTime,@RequestParam String endTime){
+        ordersService.export(response,startTime,endTime);
     }
 
 }

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service("bossOrdersService")
@@ -43,15 +44,17 @@ public class OrdersServiceImpl implements OrdersService {
 
 
     @Override
-    public void export(HttpServletResponse response) {
-        List<OrdersVO> list = list();
+    public void export(HttpServletResponse response, String startTime,String endTime) {
+        LocalDateTime start = LocalDateTime.parse(startTime);
+        LocalDateTime end = LocalDateTime.parse(endTime);
+        List<OrdersVO> list = list(start,end);
         log.info("list:{}",list);
-        ExcelUtil.exportMonth(response,list);
+        ExcelUtil.export(response,list,start,end);
     }
 
-    public List<OrdersVO> list(){
-        List<OrdersVO> list=ordersMapper.list();
-        return list;
+    @Override
+    public List<OrdersVO> list(LocalDateTime startTime,LocalDateTime endTime){
+        return ordersMapper.list(startTime,endTime);
     }
 
 

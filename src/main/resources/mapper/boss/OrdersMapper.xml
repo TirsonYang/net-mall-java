@@ -15,6 +15,6 @@
         select * from `net-mall`.orders where status=#{status}
     </select>
     <select id="list" resultType="com.net.mall.pojo.vo.OrdersVO">
-        select * from `net-mall`.orders
+        select * from `net-mall`.orders where order_time between #{startTime} and #{endTime}
     </select>
 </mapper>
