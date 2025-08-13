@@ -1,7 +1,6 @@
 package com.net.mall.common.utils;
 
 import com.net.mall.common.exception.BaseException;
-import com.net.mall.pojo.entity.OrdersEntity;
 import com.net.mall.pojo.vo.OrdersVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -12,13 +11,11 @@ import org.apache.poi.xssf.usermodel.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -47,9 +44,6 @@ public class ExcelUtil {
             // 垂直居中
             cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
-            //TODO 标题行高度增加，字体大小增加，表头字体加粗，表尾计算金额
-            //TODO 测试：是否按时间成功过滤
-
             XSSFSheet sheet = workbook.createSheet();
             XSSFRow title = sheet.createRow(0);
 
@@ -70,11 +64,20 @@ public class ExcelUtil {
             headersCell.setCellValue("点一点 " + startTime.toString() + " - " + endTime.toString() + " 订单");
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 10));
             // 表头
+            //设置表头样式
+            XSSFFont headersFont = workbook.createFont();
+            headersFont.setBold(true);
+            XSSFCellStyle st = workbook.createCellStyle();
+            st.setFont(headersFont);
+
+
             XSSFRow row1 = sheet.createRow(1);
             String[] headers = {"订单编号", "订单状态", "下单用户id", "机位id", "下单时间", "支付时间", "支付方式", "实际总价", "优惠金额", "原始价格", "下单手机号"};
             for (int i = 0; i < headers.length; i++) {
                 // 填充表头
-                row1.createCell(i).setCellValue(headers[i]);
+                XSSFCell cell = row1.createCell(i);
+                cell.setCellValue(headers[i]);
+                cell.setCellStyle(st);
             }
             for (int i=0;i<list.size();i++) {
                 XSSFRow row = sheet.createRow(i + 2);
@@ -93,7 +96,42 @@ public class ExcelUtil {
                 row.createCell(8).setCellValue(list.get(i).getPreference().toString());
                 row.createCell(9).setCellValue(list.get(i).getAmount().toString());
                 row.createCell(10).setCellValue(list.get(i).getPhone());
-        }
+            }
+            XSSFRow tailRow = sheet.createRow(list.size() + 3);
+            XSSFCell cell1 = tailRow.createCell(6);
+            cell1.setCellValue("实际收入：");
+            XSSFCell cell2 = tailRow.createCell(8);
+            cell2.setCellValue("共优惠：");
+            BigDecimal income=new BigDecimal("0");
+            BigDecimal preference=new BigDecimal("0");
+            for (OrdersVO vo : list) {
+                income=income.add(vo.getTotal());
+                preference=preference.add(vo.getPreference());
+            }
+            XSSFCell cell3 = tailRow.createCell(7);
+            cell3.setCellValue(income.toString());
+            cell3.setCellStyle(st);
+            XSSFCell cell4 = tailRow.createCell(9);
+            cell4.setCellValue(preference.toString());
+            cell4.setCellStyle(st);
+
+
+
+            //设置标题样式
+            XSSFFont titleFont = workbook.createFont();
+            titleFont.setFontHeightInPoints((short) 20);
+            titleFont.setBold(true);
+            XSSFCellStyle titleStyle = workbook.createCellStyle();
+            titleStyle.setFont(titleFont);
+            titleStyle.setAlignment(HorizontalAlignment.CENTER);
+            titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            headersCell.setCellStyle(titleStyle);
+
+
+
+
+
+
             String entryName = "点一点订单.xlsx";
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             workbook.write(bos);
