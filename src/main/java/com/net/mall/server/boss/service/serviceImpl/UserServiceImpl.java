@@ -2,6 +2,7 @@ package com.net.mall.server.boss.service.serviceImpl;
 
 import com.net.mall.common.exception.BaseException;
 import com.net.mall.pojo.dto.UserDTO;
+import com.net.mall.pojo.dto.UserPasswordDTO;
 import com.net.mall.pojo.entity.UserEntity;
 import com.net.mall.server.boss.mapper.UserMapper;
 import com.net.mall.server.boss.service.UserService;
@@ -31,5 +32,21 @@ public class UserServiceImpl implements UserService {
 
         return entity;
 
+    }
+
+    @Override
+    public Integer updatePassword(UserPasswordDTO dto) {
+        UserEntity entity = userMapper.findByUsername(dto.getUsername());
+        if (entity==null){
+            return 1;
+        }
+        if (!entity.getPassword().equals(dto.getOldPassword())){
+            return 2;
+        }
+        UserDTO user= new UserDTO();
+        user.setPassword(dto.getNewPassword());
+        user.setUsername(dto.getUsername());
+        userMapper.update(user);
+        return 3;
     }
 }

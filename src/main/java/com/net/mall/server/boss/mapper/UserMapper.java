@@ -11,4 +11,8 @@ import org.springframework.stereotype.Component;
 public interface UserMapper {
 
     UserEntity login(UserDTO dto);
+
+    UserEntity findByUsername(String username);
+
+    void update(UserDTO user);
 }
