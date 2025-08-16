@@ -3,6 +3,7 @@ package com.net.mall.server.boss.service;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.pojo.dto.ProductDTO;
+import com.net.mall.pojo.entity.ProductEntity;
 
 public interface ProductService {
     void add(ProductDTO dto);
@@ -12,4 +13,6 @@ public interface ProductService {
     void delete(Long id);
 
     PageResult page(PageQuery query,Long categoryId);
+
+    ProductEntity getById(Long productId);
 }

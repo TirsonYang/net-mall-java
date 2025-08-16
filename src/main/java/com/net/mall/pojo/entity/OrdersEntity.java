@@ -45,7 +45,7 @@ public class OrdersEntity implements Serializable {
     private LocalDateTime checkoutTime;
 
     /**
-     * 支付方式(1微信、2支付宝)
+     * 支付方式(1微信、2支付宝、3优惠券)
      */
     private Integer payMethod;
 

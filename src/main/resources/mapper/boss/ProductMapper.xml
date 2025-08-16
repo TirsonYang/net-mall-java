@@ -46,6 +46,9 @@
     <select id="page" resultType="com.net.mall.pojo.vo.ProductVO">
         select * from `net-mall`.product where category_id=#{categoryId}
     </select>
+    <select id="getById" resultType="com.net.mall.pojo.entity.ProductEntity">
+        select * from `net-mall`.product where id= #{productId}
+    </select>
 
 
 </mapper>

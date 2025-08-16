@@ -1,0 +1,26 @@
+package com.net.mall.server.boss.mapper;
+
+import com.github.pagehelper.Page;
+import com.net.mall.common.params.PageQuery;
+import com.net.mall.pojo.dto.TicketDTO;
+import com.net.mall.pojo.entity.TicketEntity;
+import com.net.mall.pojo.vo.TicketVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Mapper
+@Component("bossTicketMapper")
+public interface TicketMapper {
+
+    void add(TicketDTO dto);
+
+    List<TicketVO> listById(Long userId);
+
+    Page<TicketVO> pageById(Long userId, PageQuery query);
+
+    List<TicketEntity> listByStatus(Integer status);
+
+    void updateStatus(Long ticketId, Integer status);
+}

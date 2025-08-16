@@ -17,4 +17,6 @@ public interface ProductMapper {
     void delete(Long id);
 
     Page<ProductVO> page(PageQuery query,Long categoryId);
+
+    ProductEntity getById(Long productId);
 }

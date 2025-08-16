@@ -2,6 +2,7 @@ package com.net.mall.server.user.service.serviceImpl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.net.mall.common.context.BaseContext;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.utils.OrderNumGenerateUtil;
@@ -10,16 +11,20 @@ import com.net.mall.pojo.dto.OrdersCancelDTO;
 import com.net.mall.pojo.dto.OrdersDTO;
 import com.net.mall.pojo.entity.OrderDetailEntity;
 import com.net.mall.pojo.entity.OrdersEntity;
+import com.net.mall.pojo.entity.ProductEntity;
+import com.net.mall.pojo.entity.TicketEntity;
 import com.net.mall.pojo.vo.OrdersVO;
 import com.net.mall.pojo.vo.ShoppingCartVO;
 import com.net.mall.server.user.mapper.OrdersMapper;
 import com.net.mall.server.user.service.OrderDetailService;
 import com.net.mall.server.user.service.OrdersService;
+import com.net.mall.server.user.service.ProductService;
 import com.net.mall.server.user.service.ShoppingCartService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +38,8 @@ public class OrdersServiceImpl implements OrdersService {
     private OrderDetailService orderDetailService;
     @Autowired
     private ShoppingCartService shoppingCartService;
+    @Autowired
+    private ProductService productService;
 
     @Override
     public List<OrdersVO> list() {
@@ -86,5 +93,34 @@ public class OrdersServiceImpl implements OrdersService {
     public void cancel(OrdersCancelDTO dto) {
         LocalDateTime now= LocalDateTime.now();
         ordersMapper.cancel(dto,now);
+    }
+
+    @Override
+    public void orderByTicket(TicketEntity ticket,String phone) {
+        ProductEntity product = productService.getById(ticket.getProductId());
+        //配置实体类，插入订单表
+        OrdersEntity entity = new OrdersEntity();
+        entity.setOrderNum(OrderNumGenerateUtil.generateOrderId());
+        entity.setStatus(2);
+        entity.setComputerId(1L);
+        entity.setUserId(BaseContext.getCurrentUserId());
+        entity.setOrderTime(LocalDateTime.now());
+        entity.setCheckoutTime(LocalDateTime.now());
+        entity.setTotal(product.getPrice());
+        entity.setPreference(product.getPrice());
+        entity.setAmount(product.getPrice());
+        entity.setRemark("使用优惠券");
+        entity.setPhone(phone);
+        ordersMapper.add(entity);
+
+        //配置实体类，插入订单明细表
+        OrderDetailEntity detailEntity = new OrderDetailEntity();
+        detailEntity.setProductId(product.getId());
+        detailEntity.setProductName(product.getProductName());
+        detailEntity.setImageUrl(product.getImageUrl());
+        detailEntity.setOrderId(entity.getId());
+        detailEntity.setQuantity(1);
+        detailEntity.setAmount(new BigDecimal("0"));
+        orderDetailService.add(detailEntity);
     }
 }

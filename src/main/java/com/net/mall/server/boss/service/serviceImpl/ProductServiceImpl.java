@@ -57,4 +57,9 @@ public class ProductServiceImpl implements ProductService {
         Page<ProductVO> page=productMapper.page(query,categoryId);
         return new PageResult(page.getTotal(),page.getResult());
     }
+
+    @Override
+    public ProductEntity getById(Long productId) {
+        return productMapper.getById(productId);
+    }
 }

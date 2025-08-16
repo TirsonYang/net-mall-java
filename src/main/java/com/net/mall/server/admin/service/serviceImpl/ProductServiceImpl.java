@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
+import com.net.mall.pojo.entity.ProductEntity;
 import com.net.mall.pojo.vo.ProductVO;
 import com.net.mall.server.admin.mapper.ProductMapper;
 import com.net.mall.server.admin.service.ProductService;
@@ -33,5 +34,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateStock(Long id, Integer stock) {
         productMapper.updateStock(id,stock);
+    }
+
+    @Override
+    public ProductEntity getById(Long productId) {
+        return productMapper.getById(productId);
     }
 }

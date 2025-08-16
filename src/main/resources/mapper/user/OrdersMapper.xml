@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.net.mall.server.user.mapper.OrdersMapper">
 
-    <insert id="add" useGeneratedKeys="true" keyProperty="sid">
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
         insert into `net-mall`.orders (order_num,status,user_id,computer_id,order_time,checkout_time,pay_method,total,preference,amount,remark,phone,cancel_reason,cancel_time,delivery_time)
         values(#{orderNum},#{status},#{userId},#{computerId},#{orderTime},#{checkoutTime},#{payMethod},#{total},#{preference},#{amount},#{remark},#{phone},#{cancelReason},#{cancelTime},#{deliveryTime})
     </insert>

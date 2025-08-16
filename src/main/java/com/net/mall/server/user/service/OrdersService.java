@@ -4,6 +4,7 @@ import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.pojo.dto.OrdersCancelDTO;
 import com.net.mall.pojo.dto.OrdersDTO;
+import com.net.mall.pojo.entity.TicketEntity;
 import com.net.mall.pojo.vo.OrdersVO;
 import org.springframework.stereotype.Service;
 
@@ -20,4 +21,6 @@ public interface OrdersService {
     void add(OrdersDTO dto);
 
     void cancel(OrdersCancelDTO dto);
+
+    void orderByTicket(TicketEntity ticket,String phone);
 }
