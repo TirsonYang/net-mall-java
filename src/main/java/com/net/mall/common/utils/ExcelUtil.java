@@ -99,14 +99,17 @@ public class ExcelUtil {
             }
             XSSFRow tailRow = sheet.createRow(list.size() + 3);
             XSSFCell cell1 = tailRow.createCell(6);
+
             cell1.setCellValue("实际收入：");
             XSSFCell cell2 = tailRow.createCell(8);
             cell2.setCellValue("共优惠：");
             BigDecimal income=new BigDecimal("0");
             BigDecimal preference=new BigDecimal("0");
             for (OrdersVO vo : list) {
-                income=income.add(vo.getTotal());
-                preference=preference.add(vo.getPreference());
+                if (vo.getStatus()==2||vo.getStatus()==3) {
+                    income=income.add(vo.getTotal());
+                    preference=preference.add(vo.getPreference());
+                }
             }
             XSSFCell cell3 = tailRow.createCell(7);
             cell3.setCellValue(income.toString());

@@ -32,8 +32,6 @@ public class OrdersController {
         return Result.success(page);
     }
 
-
-    //TODO 待完善： 前端确认送达后，每隔一定时间自动将订单状态从已送达改为已完成，springTask
     /**
      * 前台端确认送达
      * @param id
