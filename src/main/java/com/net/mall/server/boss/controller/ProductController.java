@@ -4,10 +4,15 @@ import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.result.Result;
 import com.net.mall.pojo.dto.ProductDTO;
+import com.net.mall.pojo.vo.CateProVO;
+import com.net.mall.pojo.vo.ProductVO;
+import com.net.mall.server.boss.service.CategoryService;
 import com.net.mall.server.boss.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 /**
@@ -20,6 +25,8 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private CategoryService categoryService;
 
     /**
      * 新增商品
@@ -76,6 +83,20 @@ public class ProductController {
         log.info("分页查询：{}",query);
         PageResult page=productService.page(query,categoryId);
         return Result.success(page);
+    }
+
+    @GetMapping("/getCate")
+    public Result<List<CateProVO>> getCate(){
+        log.info("商品页查询分类");
+        List<CateProVO> list = categoryService.getCate();
+        return Result.success(list);
+    }
+
+    @GetMapping("/list")
+    public Result<List<ProductVO>> list(@RequestParam(required = false) Long categoryId){
+        log.info("商品查询列表：{}",categoryId);
+        List<ProductVO> list = productService.list(categoryId);
+        return Result.success(list);
     }
 
 }

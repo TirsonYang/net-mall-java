@@ -10,6 +10,20 @@
     <select id="page" resultType="com.net.mall.pojo.vo.OrdersVO">
         select * from `net-mall`.orders where status=2
     </select>
+    <select id="list" resultType="com.net.mall.pojo.vo.OrdersVO">
+        select * from `net-mall`.orders
+        <where>
+            <if test="userId!=null and userId!=''">
+                and user_id=#{userId}
+            </if>
+            <if test="startTime!=null and startTime!=''">
+                and checkout_time &gt;= #{startTime}
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                and checkout_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
 
 
 </mapper>

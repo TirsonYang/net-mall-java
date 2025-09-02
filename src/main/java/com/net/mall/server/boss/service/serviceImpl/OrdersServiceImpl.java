@@ -44,17 +44,15 @@ public class OrdersServiceImpl implements OrdersService {
 
 
     @Override
-    public void export(HttpServletResponse response, String startTime,String endTime) {
-        LocalDateTime start = LocalDateTime.parse(startTime);
-        LocalDateTime end = LocalDateTime.parse(endTime);
-        List<OrdersVO> list = list(start,end);
+    public void export(HttpServletResponse response, String orderNum,LocalDateTime startTime,LocalDateTime endTime) {
+        List<OrdersVO> list = list(orderNum,startTime,endTime);
         log.info("list:{}",list);
-        ExcelUtil.export(response,list,start,end);
+        ExcelUtil.export(response,list);
     }
 
     @Override
-    public List<OrdersVO> list(LocalDateTime startTime,LocalDateTime endTime){
-        return ordersMapper.list(startTime,endTime);
+    public List<OrdersVO> list(String orderNum,LocalDateTime startTime,LocalDateTime endTime){
+        return ordersMapper.list(orderNum,startTime,endTime);
     }
 
 

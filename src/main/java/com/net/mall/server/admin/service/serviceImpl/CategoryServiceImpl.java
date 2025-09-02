@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
+import com.net.mall.pojo.vo.CateProVO;
 import com.net.mall.pojo.vo.CategoryVO;
 import com.net.mall.server.admin.mapper.CategoryMapper;
 import com.net.mall.server.admin.service.CategoryService;
@@ -28,5 +29,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryVO> list() {
         return categoryMapper.list();
+    }
+
+    @Override
+    public List<CateProVO> getCate() {
+        return categoryMapper.getCate();
     }
 }

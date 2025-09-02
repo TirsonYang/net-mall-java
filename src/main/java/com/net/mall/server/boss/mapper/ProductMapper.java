@@ -7,6 +7,8 @@ import com.net.mall.pojo.vo.ProductVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Mapper
 @Component("bossProductMapper")
 public interface ProductMapper {
@@ -19,4 +21,6 @@ public interface ProductMapper {
     Page<ProductVO> page(PageQuery query,Long categoryId);
 
     ProductEntity getById(Long productId);
+
+    List<ProductVO> getList(Long categoryId);
 }

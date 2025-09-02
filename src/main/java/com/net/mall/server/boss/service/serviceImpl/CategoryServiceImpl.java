@@ -7,6 +7,7 @@ import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.pojo.dto.CategoryDTO;
 import com.net.mall.pojo.entity.CategoryEntity;
+import com.net.mall.pojo.vo.CateProVO;
 import com.net.mall.pojo.vo.CategoryVO;
 import com.net.mall.server.boss.mapper.CategoryMapper;
 import com.net.mall.server.boss.service.CategoryService;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Service("bossCategoryService")
@@ -59,5 +59,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryVO> list() {
         return categoryMapper.list();
+    }
+
+    @Override
+    public List<CateProVO> getCate() {
+        return categoryMapper.getCate();
     }
 }

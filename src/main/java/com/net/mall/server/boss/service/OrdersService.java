@@ -16,7 +16,7 @@ public interface OrdersService {
 
     List<OrdersEntity> getListByStatus(Integer status);
 
-    void export(HttpServletResponse response, String startTime,String endTime);
+    void export(HttpServletResponse response,String orderNum, LocalDateTime startTime,LocalDateTime endTime);
 
-    List<OrdersVO> list(LocalDateTime startTime,LocalDateTime endTime);
+    List<OrdersVO> list(String orderNum,LocalDateTime startTime,LocalDateTime endTime);
 }

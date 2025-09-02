@@ -10,5 +10,9 @@
     <select id="list" resultType="com.net.mall.pojo.vo.CategoryVO">
         select * from `net-mall`.category
     </select>
+    <select id="getCate" resultType="com.net.mall.pojo.vo.CateProVO">
+        select id,category_name from `net-mall`.category
+    </select>
+
 
 </mapper>

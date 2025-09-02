@@ -24,15 +24,15 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-        log.info("开始注册admin自定义拦截器...");
-        registry.addInterceptor(adminLoginInterceptor)
-                .addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/user/login");
-
-        log.info("开始注册boss自定义拦截器...");
-        registry.addInterceptor(bossLoginInterceptor)
-                .addPathPatterns("/boss/**")
-                .excludePathPatterns("/boss/user/login");
+//        log.info("开始注册admin自定义拦截器...");
+//        registry.addInterceptor(adminLoginInterceptor)
+//                .addPathPatterns("/admin/**")
+//                .excludePathPatterns("/admin/user/login");
+//
+//        log.info("开始注册boss自定义拦截器...");
+//        registry.addInterceptor(bossLoginInterceptor)
+//                .addPathPatterns("/boss/**")
+//                .excludePathPatterns("/boss/user/login");
 
 //        registry.addInterceptor(jwtTokenUserInterceptor)
 //                .addPathPatterns("/user/**")

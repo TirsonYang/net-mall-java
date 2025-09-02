@@ -49,6 +49,14 @@
     <select id="getById" resultType="com.net.mall.pojo.entity.ProductEntity">
         select * from `net-mall`.product where id= #{productId}
     </select>
+    <select id="getList" resultType="com.net.mall.pojo.vo.ProductVO">
+        select * from `net-mall`.product
+        <where>
+            <if test="categoryId!=null and categoryId!=''">
+                and category_id=#{categoryId}
+            </if>
+        </where>
+    </select>
 
 
 </mapper>

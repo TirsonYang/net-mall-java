@@ -15,6 +15,17 @@
         select * from `net-mall`.orders where status=#{status}
     </select>
     <select id="list" resultType="com.net.mall.pojo.vo.OrdersVO">
-        select * from `net-mall`.orders where order_time between #{startTime} and #{endTime}
+        select * from `net-mall`.orders
+        <where>
+            <if test="orderNum!=null and orderNum!=''">
+                and order_num = #{orderNum}
+            </if>
+            <if test="startTime!=null">
+                and checkout_time &gt;= #{startTime}
+            </if>
+            <if test="endTime!=null">
+                and checkout_time &lt;= #{endTime}
+            </if>
+        </where>
     </select>
 </mapper>

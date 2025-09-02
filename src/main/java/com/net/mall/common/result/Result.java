@@ -29,6 +29,7 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> error(String msg){
         Result<T> result = new Result<>();
         result.setMsg(msg);
+        result.setCode("707");
         return result;
     }
 

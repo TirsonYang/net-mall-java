@@ -20,5 +20,5 @@ public interface OrdersMapper {
 
     List<OrdersEntity> getListByStatus(Integer status);
 
-    List<OrdersVO> list(LocalDateTime startTime,LocalDateTime endTime);
+    List<OrdersVO> list(String orderNum,LocalDateTime startTime,LocalDateTime endTime);
 }

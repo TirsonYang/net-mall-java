@@ -22,7 +22,7 @@ import java.util.zip.ZipOutputStream;
 @Slf4j
 public class ExcelUtil {
 
-    public static void export(HttpServletResponse response, List<OrdersVO> list, LocalDateTime startTime, LocalDateTime endTime) {
+    public static void export(HttpServletResponse response, List<OrdersVO> list) {
 
         String fileName = null;
         try {
@@ -61,7 +61,7 @@ public class ExcelUtil {
             // 标题
             XSSFCell headersCell = title.createCell(0);
             headersCell.setCellStyle(cellStyle);
-            headersCell.setCellValue("点一点 " + startTime.toString() + " - " + endTime.toString() + " 订单");
+            headersCell.setCellValue("点一点订单");
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 10));
             // 表头
             //设置表头样式

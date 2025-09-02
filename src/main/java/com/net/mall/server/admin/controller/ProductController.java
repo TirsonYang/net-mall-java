@@ -4,7 +4,9 @@ package com.net.mall.server.admin.controller;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.result.Result;
+import com.net.mall.pojo.vo.CateProVO;
 import com.net.mall.pojo.vo.ProductVO;
+import com.net.mall.server.admin.service.CategoryService;
 import com.net.mall.server.admin.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private CategoryService categoryService;
 
 
     /**
@@ -43,9 +47,10 @@ public class ProductController {
      * @return
      */
     @GetMapping("/list")
-    public Result<List<ProductVO>> list(@RequestParam Long categoryId){
+    public Result<List<ProductVO>> list(@RequestParam(required = false) Long categoryId){
         log.info("前台查询分类为:{}的商品",categoryId);
         List<ProductVO> list=productService.list(categoryId);
+        log.info("前台查询分类为:{}的商品结果为:{}",categoryId,list);
         return Result.success(list);
     }
 
@@ -60,6 +65,13 @@ public class ProductController {
         log.info("前台更新商品id为:{}的库存为:{}",id,stock);
         productService.updateStock(id,stock);
         return Result.success();
+    }
+
+    @GetMapping("/getCate")
+    public Result<List<CateProVO>> getCate(){
+        log.info("前台查询所有分类以展示商品");
+        List<CateProVO> vo=categoryService.getCate();
+        return Result.success(vo);
     }
 
 }

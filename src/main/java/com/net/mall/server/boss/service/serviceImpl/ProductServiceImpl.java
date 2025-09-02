@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service("bossProductService")
 public class ProductServiceImpl implements ProductService {
@@ -61,5 +62,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductEntity getById(Long productId) {
         return productMapper.getById(productId);
+    }
+
+    @Override
+    public List<ProductVO> list(Long categoryId) {
+        return productMapper.getList(categoryId);
     }
 }

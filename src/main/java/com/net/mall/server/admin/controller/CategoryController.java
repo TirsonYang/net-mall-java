@@ -48,6 +48,7 @@ public class CategoryController {
     public Result<List<CategoryVO>> list(){
         log.info("前台列表查询分类");
         List<CategoryVO> list=categoryService.list();
+        log.info("前台列表查询分类结果：{}",list);
         return Result.success(list);
     }
 
