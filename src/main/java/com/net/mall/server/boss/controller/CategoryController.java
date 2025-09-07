@@ -84,6 +84,7 @@ public class CategoryController {
      */
     @GetMapping("/list")
     public Result<List<CategoryVO>> list(){
+        log.info("boss列表查询分类");
         List<CategoryVO> list=categoryService.list();
         return Result.success(list);
     }
