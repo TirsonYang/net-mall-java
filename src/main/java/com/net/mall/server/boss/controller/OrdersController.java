@@ -9,11 +9,13 @@ import com.net.mall.pojo.vo.OrdersVO;
 import com.net.mall.server.boss.service.OrdersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * 高级管理订单管理控制器
@@ -57,8 +59,8 @@ public class OrdersController {
 
     @GetMapping("/list")
     public Result<List<OrdersVO>> list(@RequestParam (required = false) String orderNum,
-                                       @RequestParam(required = false) LocalDateTime startTime,
-                                       @RequestParam(required = false) LocalDateTime endTime){
+                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime startTime,
+                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime endTime){
         log.info("boss查询订单列表,订单号:{},开始时间:{},结束时间:{}",orderNum,startTime,endTime);
         List<OrdersVO> list=ordersService.list(orderNum,startTime,endTime);
         return Result.success(list);
