@@ -23,6 +23,9 @@ public class BossLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
         log.info("LoginInterceptor preHandle");
+        if ("OPTIONS".equals(request.getMethod())){
+            return true;
+        }
         if (!(handler instanceof HandlerInterceptor)){
             return true;
         }

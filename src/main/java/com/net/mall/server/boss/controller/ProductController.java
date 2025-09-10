@@ -3,6 +3,7 @@ package com.net.mall.server.boss.controller;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.result.Result;
+import com.net.mall.common.utils.UUIDUtil;
 import com.net.mall.pojo.dto.ProductDTO;
 import com.net.mall.pojo.vo.CateProVO;
 import com.net.mall.pojo.vo.ProductVO;
@@ -10,8 +11,12 @@ import com.net.mall.server.boss.service.CategoryService;
 import com.net.mall.server.boss.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -22,6 +27,12 @@ import java.util.List;
 @RequestMapping("/boss/product")
 @Slf4j
 public class ProductController {
+
+    @Value("${pictureFile.path}")
+    private String picturePath;
+
+    @Value("${pictureFile.path-mapping}")
+    private String picturePath_mapping;
 
     @Autowired
     private ProductService productService;
@@ -97,6 +108,26 @@ public class ProductController {
         log.info("商品查询列表：{}",categoryId);
         List<ProductVO> list = productService.list(categoryId);
         return Result.success(list);
+    }
+
+    @PostMapping("/upload/img")
+    public Result<String> upload(MultipartFile file){
+        log.info("上传图片：{}",file);
+        String fileName= file.getOriginalFilename();
+        String suffixName= fileName.substring(fileName.lastIndexOf("."));
+        fileName = UUIDUtil.getUUID() + suffixName;
+        File dest = new File(picturePath+picturePath_mapping+fileName);
+        if (!dest.getParentFile().exists()){
+            dest.getParentFile().mkdir();
+        }
+        try {
+            file.transferTo(dest);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        String final_fileName = "http://localhost:17818"+ picturePath_mapping + fileName;
+        log.info("上传成功：{}",final_fileName);
+        return Result.success(final_fileName);
     }
 
 }

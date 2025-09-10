@@ -2,6 +2,11 @@ server:
   port: 17818
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+      enabled: true
   profiles:
     active: dev
   datasource:
@@ -32,3 +37,7 @@ net:
       boss-secret-key: ${jwt.boss-secret-key}
       boss-token-name: ${jwt.boss-token-name}
       boss-ttl: ${jwt.boss-ttl}
+
+pictureFile:
+  path: "D:/develop/Code/PartTimeWork/net-mall/net-mall-java/net-mall/src/main/resources/static/"
+  path-mapping: "/myImg/"

@@ -23,6 +23,9 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("LoginInterceptor preHandle");
+        if ("OPTIONS".equals(request.getMethod())){
+            return true;
+        }
         if (!(handler instanceof HandlerMethod)){
             return true;
         }
