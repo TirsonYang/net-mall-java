@@ -20,4 +20,6 @@ public interface ProductService {
     ProductEntity getById(Long productId);
 
     List<ProductVO> list(Long categoryId);
+
+    void deleteByCategoryId(Long categoryId);
 }

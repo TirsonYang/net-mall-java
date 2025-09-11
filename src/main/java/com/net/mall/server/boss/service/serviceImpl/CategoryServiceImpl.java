@@ -11,6 +11,7 @@ import com.net.mall.pojo.vo.CateProVO;
 import com.net.mall.pojo.vo.CategoryVO;
 import com.net.mall.server.boss.mapper.CategoryMapper;
 import com.net.mall.server.boss.service.CategoryService;
+import com.net.mall.server.boss.service.ProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private ProductService productService;
 
     @Override
     public void add(CategoryDTO dto) {
@@ -47,6 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Long id) {
         categoryMapper.delete(id);
+        productService.deleteByCategoryId(id);
     }
 
     @Override

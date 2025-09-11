@@ -10,6 +10,7 @@ import com.net.mall.pojo.entity.ProductEntity;
 import com.net.mall.pojo.vo.ProductVO;
 import com.net.mall.server.boss.mapper.ProductMapper;
 import com.net.mall.server.boss.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service("bossProductService")
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
@@ -67,5 +69,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductVO> list(Long categoryId) {
         return productMapper.getList(categoryId);
+    }
+
+    @Override
+    public void deleteByCategoryId(Long categoryId) {
+        log.info("删除商品分类下的商品：{}",categoryId);
+        productMapper.deleteByCategoryId(categoryId);
     }
 }
