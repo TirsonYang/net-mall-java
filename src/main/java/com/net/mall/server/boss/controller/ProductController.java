@@ -34,6 +34,9 @@ public class ProductController {
     @Value("${pictureFile.path-mapping}")
     private String picturePath_mapping;
 
+    @Value("${pictureFile.url}")
+    private String pictureUrl;
+
     @Autowired
     private ProductService productService;
     @Autowired
@@ -114,9 +117,12 @@ public class ProductController {
     public Result<String> upload(MultipartFile file){
         log.info("上传图片：{}",file);
         String fileName= file.getOriginalFilename();
-        String suffixName= fileName.substring(fileName.lastIndexOf("."));
+        String suffixName= null;
+        if (fileName != null) {
+            suffixName = fileName.substring(fileName.lastIndexOf("."));
+        }
         fileName = UUIDUtil.getUUID() + suffixName;
-        File dest = new File(picturePath+picturePath_mapping+fileName);
+        File dest = new File(picturePath+fileName);
         if (!dest.getParentFile().exists()){
             dest.getParentFile().mkdir();
         }
@@ -125,9 +131,9 @@ public class ProductController {
         } catch (IOException e){
             e.printStackTrace();
         }
-        String final_fileName = "http://localhost:17818"+ picturePath_mapping + fileName;
-        log.info("上传成功：{}",final_fileName);
-        return Result.success(final_fileName);
+        String finalFileName = pictureUrl+fileName;
+        log.info("上传成功，保存路径：{}，访问URL：{}", dest.getAbsolutePath(), finalFileName);
+        return Result.success(finalFileName);
     }
 
 }

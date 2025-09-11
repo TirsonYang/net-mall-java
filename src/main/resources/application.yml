@@ -39,5 +39,6 @@ net:
       boss-ttl: ${jwt.boss-ttl}
 
 pictureFile:
-  path: "D:/develop/Code/PartTimeWork/net-mall/net-mall-java/net-mall/src/main/resources/static/"
-  path-mapping: "/myImg/"
+  path: ${pictureFile.path-dev}
+  path-mapping: ${pictureFile.path-mapping-dev}
+  url: ${pictureFile.url-dev}
