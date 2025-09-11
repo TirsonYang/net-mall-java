@@ -42,8 +42,6 @@ public class ProductServiceImpl implements ProductService {
         BeanUtils.copyProperties(dto,entity);
         entity.setUpdateTime(LocalDateTime.now());
         entity.setUpdateUser(BaseContext.getCurrentUserId());
-        //TODO 完成图片上传功能后设置图片访问路径
-        entity.setImageUrl("./img");
         productMapper.update(entity);
     }
 

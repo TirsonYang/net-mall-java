@@ -1,6 +1,12 @@
 server:
   port: 17818
 
+logging:
+  level:
+    com.net.mall.server.boss.mapper: debug
+    com.net.mall.server.admin.mapper: debug
+    com.net.mall.server.user.mapper: debug
+
 spring:
   servlet:
     multipart:
@@ -20,6 +26,8 @@ mybatis:
   type-aliases-package: com.net.mall.entity
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 
 # application.yml（可选配置）
 pagehelper:
