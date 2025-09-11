@@ -16,7 +16,7 @@ public class ProductVO implements Serializable {
 
     private BigDecimal price;
 
-    private String imageUrle;
+    private String imageUrl;
 
     private Integer stock;
 

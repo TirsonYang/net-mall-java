@@ -33,8 +33,6 @@ public class ProductServiceImpl implements ProductService {
         entity.setUpdateTime(LocalDateTime.now());
         entity.setCreateUser(BaseContext.getCurrentUserId());
         entity.setUpdateUser(BaseContext.getCurrentUserId());
-        //TODO 完成图片上传功能后设置图片访问路径
-        entity.setImageUrl("./img");
         productMapper.add(entity);
     }
 
