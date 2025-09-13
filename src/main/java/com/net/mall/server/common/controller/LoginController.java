@@ -35,7 +35,8 @@ public class LoginController {
             return Result.error("用户不存在");
         }
         Map<String,Object> claims=new HashMap<>();
-        claims.put("bossId",entity.getId());
+        claims.put("userId",entity.getId());
+        claims.put("userRole",entity.getType());
         String token= JwtUtil.generateJWT(jwtProperty.getUserSecretKey()
                 ,jwtProperty.getUserTtl()
                 ,claims);

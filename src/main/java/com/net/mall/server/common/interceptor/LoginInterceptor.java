@@ -22,6 +22,9 @@ public class LoginInterceptor implements HandlerInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
         log.info("LoginInterceptor preHandle");
+        // 打印日志 观察是否成功拦截
+        log.info(request.toString());
+
         if ("OPTIONS".equals(request.getMethod())){
             return true;
         }
