@@ -4,6 +4,7 @@ package com.net.mall.server.admin.controller;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.result.Result;
+import com.net.mall.pojo.dto.UpdateStockDTO;
 import com.net.mall.pojo.vo.CateProVO;
 import com.net.mall.pojo.vo.ProductVO;
 import com.net.mall.server.admin.service.CategoryService;
@@ -56,14 +57,13 @@ public class ProductController {
 
     /**
      * 前台端更新商品库存
-     * @param id
-     * @param stock
+     * @param dto
      * @return
      */
     @PostMapping("/updateStock")
-    public Result updateStock(@RequestParam Long id,@RequestParam Integer stock){
-        log.info("前台更新商品id为:{}的库存为:{}",id,stock);
-        productService.updateStock(id,stock);
+    public Result updateStock(@RequestBody UpdateStockDTO dto){
+        log.info("前台更新商品id为:{}的库存为:{}",dto.getId(),dto.getStock());
+        productService.updateStock(dto.getId(),dto.getStock());
         return Result.success();
     }
 

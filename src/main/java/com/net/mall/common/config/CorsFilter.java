@@ -20,7 +20,7 @@ public class CorsFilter implements Filter {
         // 2. 允许的请求方法（必须包含OPTIONS）
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         // 3. 允许的请求头（包含文件上传所需的头）
-        res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Requested-With, Accept");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Requested-With, Accept, Authorization");
         // 4. 允许携带凭证（与前端with-credentials=true对应）
         res.setHeader("Access-Control-Allow-Credentials", "true");
         // 5. 预检请求的有效期（避免频繁发送OPTIONS）

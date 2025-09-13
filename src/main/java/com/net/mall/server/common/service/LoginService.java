@@ -1,8 +1,9 @@
-package com.net.mall.server.admin.service;
+package com.net.mall.server.common.service;
 
 import com.net.mall.pojo.dto.UserDTO;
 import com.net.mall.pojo.entity.UserEntity;
+import com.net.mall.pojo.vo.UserVO;
 
-public interface UserService {
+public interface LoginService {
     UserEntity login(UserDTO dto);
 }

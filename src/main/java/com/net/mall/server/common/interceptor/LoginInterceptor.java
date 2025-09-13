@@ -1,4 +1,4 @@
-package com.net.mall.server.boss.interceptor;
+package com.net.mall.server.common.interceptor;
 
 import com.net.mall.common.context.BaseContext;
 import com.net.mall.common.properties.JwtProperty;
@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 @Slf4j
-public class BossLoginInterceptor implements HandlerInterceptor {
-
+public class LoginInterceptor implements HandlerInterceptor{
     @Autowired
     private JwtProperty jwtProperty;
 
@@ -32,12 +31,12 @@ public class BossLoginInterceptor implements HandlerInterceptor {
 
         try {
             log.info("-------注册boss拦截器--------");
-            String token=request.getHeader(jwtProperty.getBossTokenName());
+            String token=request.getHeader(jwtProperty.getUserTokenName());
             log.info("jwt校验：{}",token);
-            Claims claims= JwtUtil.parseJWT(jwtProperty.getBossSecretKey(),token);
-            Long bossId=Long.valueOf(claims.get("bossId").toString());
-            log.info("bossId:{}",bossId);
-            BaseContext.setCurrentUserId(bossId);
+            Claims claims= JwtUtil.parseJWT(jwtProperty.getUserSecretKey(),token);
+            Long userId=Long.valueOf(claims.get("userId").toString());
+            log.info("userId:{}",userId);
+            BaseContext.setCurrentUserId(userId);
             return true;
         } catch (NumberFormatException e) {
             log.info("jwt校验失败");
@@ -46,5 +45,4 @@ public class BossLoginInterceptor implements HandlerInterceptor {
         }
 
     }
-
 }

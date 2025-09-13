@@ -1,7 +1,6 @@
 package com.net.mall.common.config;
 
-import com.net.mall.server.admin.interceptor.AdminLoginInterceptor;
-import com.net.mall.server.boss.interceptor.BossLoginInterceptor;
+import com.net.mall.server.common.interceptor.LoginInterceptor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,22 +31,16 @@ public class WebConfiguration implements WebMvcConfigurer {
     private String picturePath_mapping;
 
     @Autowired
-    private AdminLoginInterceptor adminLoginInterceptor;
-    @Autowired
-    private BossLoginInterceptor bossLoginInterceptor;
+    private LoginInterceptor loginInterceptor;
 
-//    @Override
-//    protected void addInterceptors(InterceptorRegistry registry) {
-//        log.info("开始注册admin自定义拦截器...");
-//        registry.addInterceptor(adminLoginInterceptor)
-//                .addPathPatterns("/admin/**")
-//                .excludePathPatterns("/admin/user/login");
-//
-//        log.info("开始注册boss自定义拦截器...");
-//        registry.addInterceptor(bossLoginInterceptor)
-//                .addPathPatterns("/boss/**")
-//                .excludePathPatterns("/boss/user/login");
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        log.info("开始注册自定义拦截器...");
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/admin/**")
+                .addPathPatterns("/boss/**")
+                .excludePathPatterns("/login");
+    }
 
     // 3. 新增：添加静态资源映射（解决图片访问404）
 
