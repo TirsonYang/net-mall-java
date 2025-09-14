@@ -32,10 +32,17 @@ public class TicketServiceImpl implements TicketService {
     public void add(TicketDTO dto) {
         TicketEntity entity = new TicketEntity();
         BeanUtils.copyProperties(dto,entity);
+        //TODO 修改
+        entity.setUserId(dto.getUserId());
         ProductEntity product=productService.getById(dto.getProductId());
         entity.setProductName(product.getProductName());
+        if (entity.getExpireTime().isBefore(LocalDateTime.now())){
+            entity.setStatus(2);
+        }else{
+            entity.setStatus(0);
+        }
         entity.setCreateTime(LocalDateTime.now());
-        ticketMapper.add(dto);
+        ticketMapper.add(entity);
     }
 
     @Override

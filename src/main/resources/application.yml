@@ -1,5 +1,6 @@
 server:
   port: 17818
+  address: 0.0.0.0
 
 logging:
   level:

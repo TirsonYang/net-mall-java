@@ -14,7 +14,7 @@ import java.util.List;
 @Component("bossTicketMapper")
 public interface TicketMapper {
 
-    void add(TicketDTO dto);
+    void add(TicketEntity entity);
 
     List<TicketVO> listById(Long userId);
 

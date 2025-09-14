@@ -33,7 +33,12 @@ public class TicketServiceImpl implements TicketService {
         ProductEntity product=productService.getById(dto.getProductId());
         entity.setProductName(product.getProductName());
         entity.setCreateTime(LocalDateTime.now());
-        ticketMapper.add(dto);
+        if (entity.getExpireTime().isBefore(LocalDateTime.now())){
+            entity.setStatus(2);
+        }else {
+            entity.setStatus(0);
+        }
+        ticketMapper.add(entity);
     }
 
     @Override
