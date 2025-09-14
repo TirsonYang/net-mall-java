@@ -4,6 +4,7 @@ import com.net.mall.common.properties.JwtProperty;
 import com.net.mall.common.result.Result;
 import com.net.mall.common.utils.JwtUtil;
 import com.net.mall.pojo.dto.UserDTO;
+import com.net.mall.pojo.dto.UserPasswordDTO;
 import com.net.mall.pojo.entity.UserEntity;
 import com.net.mall.pojo.vo.UserVO;
 import com.net.mall.server.common.service.LoginService;
@@ -46,5 +47,21 @@ public class LoginController {
         vo.setUsername(entity.getUsername());
 
         return Result.success(vo);
+    }
+
+    @PostMapping("/logout")
+    public Result logout(@RequestParam String token) {
+        return Result.success();
+    }
+
+    @PostMapping("/boss/updatePassword")
+    public Result updatePassword(@RequestBody UserPasswordDTO dto) {
+        if (dto==null){
+            return Result.error("参数错误");
+        }
+        log.info("修改密码:{}",dto);
+        loginService.updatePassword(dto);
+
+        return Result.success();
     }
 }

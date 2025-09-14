@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.net.mall.server.common.mapper.LoginMapper">
+    <update id="update">
+        update `net-mall`.user set password=#{password} where id=#{id}
+    </update>
 
 
     <select id="login" resultType="com.net.mall.pojo.entity.UserEntity">
         select * from `net-mall`.user where username=#{username} and password=#{password}
+    </select>
+    <select id="selectByUsername" resultType="com.net.mall.pojo.entity.UserEntity">
+        select * from `net-mall`.user where username=#{username}
     </select>
 </mapper>

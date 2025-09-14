@@ -9,4 +9,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface LoginMapper {
 
     UserEntity login(UserDTO dto);
+
+    UserEntity selectByUsername(String username);
+
+    void update(UserEntity entity);
 }
