@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.net.mall.common.context.BaseContext;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
+import com.net.mall.common.utils.TicketOrderUtil;
+import com.net.mall.pojo.dto.UseTicketDTO;
 import com.net.mall.pojo.entity.TicketEntity;
 import com.net.mall.pojo.vo.TicketVO;
 import com.net.mall.server.user.mapper.TicketMapper;
@@ -12,6 +14,7 @@ import com.net.mall.server.user.service.OrdersService;
 import com.net.mall.server.user.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,37 +46,39 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<TicketVO> listById() {
-        Long userId = BaseContext.getCurrentUserId();
-
+    public List<TicketVO> listById(Long userId) {
         List<TicketVO> list = ticketMapper.listById(userId);
         List<TicketVO> resList = new ArrayList<>();
         for (TicketVO vo : list) {
-            if (vo.getExpireTime().isBefore(LocalDateTime.now())){
-                ticketMapper.updateStatus(vo.getTicketId(),3);
-                continue;
+            if (vo.getStatus()==1) {
+                if (vo.getExpireTime().isBefore(LocalDateTime.now())){
+                    ticketMapper.updateStatus(vo.getTicketId(),3);
+                    vo.setStatus(3);
+                }
             }
             resList.add(vo);
         }
 
+        TicketOrderUtil.sortTicketList(resList);
         return resList;
     }
 
     @Override
-    public Integer useTicket(Long ticketId,String phone) {
-        TicketEntity ticket=ticketMapper.getById(ticketId);
-        if (ticketMapper ==null){
+    @Transactional
+    public Integer useTicket(UseTicketDTO dto) {
+        TicketEntity ticket=ticketMapper.getById(dto.getTicketId());
+        if (ticket ==null){
             return 1;
         }
         if (ticket.getStatus()!=1){
             return 2;
         }
         if (ticket.getExpireTime().isBefore(LocalDateTime.now())){
-            ticketMapper.updateStatus(ticketId,3);
+            ticketMapper.updateStatus(dto.getTicketId(),3);
             return 3;
         }
-        ticketMapper.updateStatus(ticketId,2);
-        ordersService.orderByTicket(ticket,phone);
+        ticketMapper.updateStatus(dto.getTicketId(),2);
+        ordersService.orderByTicket(ticket,dto.getPhone(),dto.getRemark(),dto.getUserId());
         return 0;
     }
 }

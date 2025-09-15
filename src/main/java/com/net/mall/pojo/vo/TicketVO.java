@@ -53,4 +53,9 @@ public class TicketVO implements Serializable {
      */
     private Long orderId;
 
+    /**
+     * 订单号
+     */
+    private String orderNum;
+
 }

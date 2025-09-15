@@ -6,7 +6,6 @@ import com.net.mall.common.context.BaseContext;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.utils.OrderNumGenerateUtil;
-import com.net.mall.pojo.dto.OrderDetailDTO;
 import com.net.mall.pojo.dto.OrdersCancelDTO;
 import com.net.mall.pojo.dto.OrdersDTO;
 import com.net.mall.pojo.entity.OrderDetailEntity;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Service("userOrdersService")
@@ -94,21 +92,22 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public void orderByTicket(TicketEntity ticket,String phone) {
+    public void orderByTicket(TicketEntity ticket, String phone, String remark, Long userId) {
         ProductEntity product = productService.getById(ticket.getProductId());
         //配置实体类，插入订单表
         OrdersEntity entity = new OrdersEntity();
         entity.setOrderNum(OrderNumGenerateUtil.generateOrderId());
         entity.setStatus(2);
         entity.setComputerId(1L);
-        entity.setUserId(BaseContext.getCurrentUserId());
+        entity.setUserId(userId);
         entity.setOrderTime(LocalDateTime.now());
         entity.setCheckoutTime(LocalDateTime.now());
         entity.setTotal(product.getPrice());
         entity.setPreference(product.getPrice());
-        entity.setAmount(product.getPrice());
-        entity.setRemark("使用优惠券");
+        entity.setAmount(new BigDecimal("0"));
         entity.setPhone(phone);
+        entity.setRemark(remark+"--使用优惠券");
+        entity.setPayMethod(3);
         ordersMapper.add(entity);
 
         //配置实体类，插入订单明细表

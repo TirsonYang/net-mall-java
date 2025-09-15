@@ -6,7 +6,6 @@ import com.net.mall.pojo.dto.OrdersCancelDTO;
 import com.net.mall.pojo.dto.OrdersDTO;
 import com.net.mall.pojo.entity.TicketEntity;
 import com.net.mall.pojo.vo.OrdersVO;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,5 +22,5 @@ public interface OrdersService {
 
     void cancel(OrdersCancelDTO dto);
 
-    void orderByTicket(TicketEntity ticket,String phone);
+    void orderByTicket(TicketEntity ticket,String phone,String remark,Long userId);
 }

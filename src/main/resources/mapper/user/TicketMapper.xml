@@ -3,15 +3,15 @@
 <mapper namespace="com.net.mall.server.user.mapper.TicketMapper">
 
     <update id="updateStatus">
-        update `net-mall`.ticket set status=#{status} where ticket_id=#{ticketId}
+        update `net-mall`.ticket set status=#{status} ,use_time=now() where ticket_id=#{ticketId}
     </update>
 
 
     <select id="pageById" resultType="com.net.mall.pojo.vo.TicketVO">
-        select * from `net-mall`.ticket where user_id=#{userId} and status=1
+        select * from `net-mall`.ticket where user_id=#{userId}
     </select>
     <select id="listById" resultType="com.net.mall.pojo.vo.TicketVO">
-        select * from `net-mall`.ticket where user_id=#{userId} and status=1
+        select * from `net-mall`.ticket where user_id=#{userId}
     </select>
     <select id="getById" resultType="com.net.mall.pojo.entity.TicketEntity">
         select * from `net-mall`.ticket where ticket_id=#{ticketId}
