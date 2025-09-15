@@ -13,7 +13,21 @@
 
 
     <select id="list" resultType="com.net.mall.pojo.vo.OrdersVO">
-        select * from `net-mall`.orders where user_id=#{userId}
+        select * from `net-mall`.orders
+        <where>
+            <if test="orderNum!=null and orderNum!=''">
+                and order_num=#{orderNum}
+            </if>
+            <if test="startTime!=null">
+                and checkout_time &gt;= #{startTime}
+            </if>
+            <if test="endTime!=null">
+                and checkout_time &lt;= #{endTime}
+            </if>
+            <if test="userId!=null">
+                and user_id= #{userId}
+            </if>
+        </where>
     </select>
 
     <select id="page" resultType="com.net.mall.pojo.vo.OrdersVO">

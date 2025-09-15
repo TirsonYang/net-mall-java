@@ -15,7 +15,7 @@ import java.util.List;
 @Component("userOrdersMapper")
 public interface OrdersMapper {
 
-    List<OrdersVO> list(Long userId);
+    List<OrdersVO> list(String orderNum,LocalDateTime startTime, LocalDateTime endTime,Long userId);
 
     Page<OrdersVO> page(PageQuery pageQuery, Long userId);
 

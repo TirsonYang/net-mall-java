@@ -42,10 +42,8 @@ public class OrdersServiceImpl implements OrdersService {
     private ProductService productService;
 
     @Override
-    public List<OrdersVO> list() {
-        //TODO 登录功能完成后，获取当前用户id,根据userId列表查询订单
-        Long userId=1L;
-        return ordersMapper.list(userId);
+    public List<OrdersVO> list(String orderNum, LocalDateTime startTime, LocalDateTime endTime, Long userId) {
+        return ordersMapper.list(orderNum,startTime,endTime,userId);
     }
 
     @Override

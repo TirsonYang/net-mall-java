@@ -10,8 +10,10 @@ import com.net.mall.pojo.vo.OrdersVO;
 import com.net.mall.server.user.service.OrdersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController("userOrdersController")
@@ -23,9 +25,12 @@ public class OrdersController {
     private OrdersService ordersService;
 
     @GetMapping("/list")
-    public Result<List<OrdersVO>> list(){
-        log.info("会员订单列表");
-        List<OrdersVO> list=ordersService.list();
+    public Result<List<OrdersVO>> list(@RequestParam (required = false) String orderNum,
+                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime startTime,
+                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime endTime,
+                                       @RequestParam Long userId){
+        log.info("boss查询订单列表,订单号:{},开始时间:{},结束时间:{}",orderNum,startTime,endTime);
+        List<OrdersVO> list=ordersService.list(orderNum,startTime,endTime,userId);
         return Result.success(list);
     }
 

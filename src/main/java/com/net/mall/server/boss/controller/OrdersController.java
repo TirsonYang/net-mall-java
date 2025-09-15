@@ -64,7 +64,6 @@ public class OrdersController {
         log.info("boss查询订单列表,订单号:{},开始时间:{},结束时间:{}",orderNum,startTime,endTime);
         List<OrdersVO> list=ordersService.list(orderNum,startTime,endTime);
         return Result.success(list);
-
     }
 
 }

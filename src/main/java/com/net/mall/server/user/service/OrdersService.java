@@ -8,11 +8,12 @@ import com.net.mall.pojo.entity.TicketEntity;
 import com.net.mall.pojo.vo.OrdersVO;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
 public interface OrdersService {
-    List<OrdersVO> list();
+    List<OrdersVO> list(String orderNum, LocalDateTime startTime, LocalDateTime endTime, Long userId);
 
     PageResult page(PageQuery pageQuery);
 
