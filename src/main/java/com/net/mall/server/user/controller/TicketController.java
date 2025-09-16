@@ -5,6 +5,7 @@ import com.net.mall.common.result.PageResult;
 import com.net.mall.common.result.Result;
 import com.net.mall.pojo.dto.UseTicketDTO;
 import com.net.mall.pojo.vo.TicketVO;
+import com.net.mall.pojo.vo.UseTicketVO;
 import com.net.mall.server.user.service.TicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class TicketController {
     }
 
     @PostMapping("use")
-    public Result useTicket(@RequestBody UseTicketDTO dto){
+    public Result<UseTicketVO> useTicket(@RequestBody UseTicketDTO dto){
         if (dto==null){
             return Result.error("参数错误");
         }

@@ -26,7 +26,7 @@ public class CorsFilter implements Filter {
 
         String origin = req.getHeader("Origin");
 
-        if (allowedOrigins.contains(origin)){
+        if (origin==null||allowedOrigins.contains(origin)){
             res.setHeader("Access-Control-Allow-Origin", origin);
         }
 

@@ -2,7 +2,6 @@ package com.net.mall.server.user.service.serviceImpl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.net.mall.common.context.BaseContext;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.utils.OrderNumGenerateUtil;
@@ -12,6 +11,7 @@ import com.net.mall.pojo.entity.OrderDetailEntity;
 import com.net.mall.pojo.entity.OrdersEntity;
 import com.net.mall.pojo.entity.ProductEntity;
 import com.net.mall.pojo.entity.TicketEntity;
+import com.net.mall.pojo.vo.OrderMessageVO;
 import com.net.mall.pojo.vo.OrdersVO;
 import com.net.mall.pojo.vo.ShoppingCartVO;
 import com.net.mall.server.user.mapper.OrdersMapper;
@@ -19,6 +19,7 @@ import com.net.mall.server.user.service.OrderDetailService;
 import com.net.mall.server.user.service.OrdersService;
 import com.net.mall.server.user.service.ProductService;
 import com.net.mall.server.user.service.ShoppingCartService;
+import com.net.mall.server.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,8 @@ public class OrdersServiceImpl implements OrdersService {
     private ShoppingCartService shoppingCartService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     @Override
     public List<OrdersVO> list(String orderNum, LocalDateTime startTime, LocalDateTime endTime, Long userId) {
@@ -71,6 +74,20 @@ public class OrdersServiceImpl implements OrdersService {
         entity.setComputerId(computerId);
         entity.setOrderTime(LocalDateTime.now());
         ordersMapper.add(entity);
+
+
+        //websocket发送信息 提示来单
+
+        OrderMessageVO messageVO=new OrderMessageVO();
+        messageVO.setContent("您有新的订单，请及时配送");
+        messageVO.setType("order");
+        messageVO.setOrderNum(entity.getOrderNum());
+        messageVO.setTimestamp(System.currentTimeMillis());
+
+        webSocketServer.send(messageVO);
+
+
+
         //2、从购物车中获取商品信息后加入订单详情
         List<ShoppingCartVO> cartList = shoppingCartService.list();
         for (ShoppingCartVO vo : cartList) {
@@ -109,6 +126,16 @@ public class OrdersServiceImpl implements OrdersService {
         entity.setRemark(remark+"--使用优惠券");
         entity.setPayMethod(3);
         ordersMapper.add(entity);
+
+
+        //websocket发送信息 提示来单
+        OrderMessageVO messageVO =new OrderMessageVO();
+        messageVO.setContent("您有新的订单，请及时配送");
+        messageVO.setType("order");
+        messageVO.setOrderNum(entity.getOrderNum());
+        messageVO.setTimestamp(System.currentTimeMillis());
+
+        webSocketServer.send(messageVO);
 
         //配置实体类，插入订单明细表
         OrderDetailEntity detailEntity = new OrderDetailEntity();
