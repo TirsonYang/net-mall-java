@@ -5,7 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.net.mall.common.context.BaseContext;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
-import com.net.mall.common.utils.TicketOrderUtil;
+import com.net.mall.common.utils.SortUtil;
 import com.net.mall.pojo.dto.UseTicketDTO;
 import com.net.mall.pojo.entity.TicketEntity;
 import com.net.mall.pojo.vo.TicketVO;
@@ -59,7 +59,7 @@ public class TicketServiceImpl implements TicketService {
             resList.add(vo);
         }
 
-        TicketOrderUtil.sortTicketList(resList);
+        SortUtil.sortTicketList(resList);
         return resList;
     }
 

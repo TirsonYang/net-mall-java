@@ -14,7 +14,7 @@ public class CorsFilter implements Filter {
 
     private final List<String> allowedOrigins = Arrays.asList(
             "http://localhost:16444",
-            "http://10.198.152.96:16444",
+            "http://10.198.216.200:16444",
             "http://6ebe67b6.r9.cpolar.cn"
     );
 

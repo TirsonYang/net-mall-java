@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
+import com.net.mall.common.utils.SortUtil;
 import com.net.mall.pojo.dto.OrdersQueryDTO;
 import com.net.mall.pojo.vo.OrdersVO;
 import com.net.mall.server.admin.mapper.OrdersMapper;
@@ -35,6 +36,8 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public List<OrdersVO> list(OrdersQueryDTO dto) {
-        return ordersMapper.list(dto);
+        List<OrdersVO> list = ordersMapper.list(dto);
+        SortUtil.sortOrdersList(list);
+        return list;
     }
 }

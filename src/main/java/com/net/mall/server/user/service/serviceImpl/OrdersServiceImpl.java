@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.utils.OrderNumGenerateUtil;
+import com.net.mall.common.utils.SortUtil;
 import com.net.mall.pojo.dto.OrdersCancelDTO;
 import com.net.mall.pojo.dto.OrdersDTO;
 import com.net.mall.pojo.entity.OrderDetailEntity;
@@ -44,7 +45,9 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public List<OrdersVO> list(String orderNum, LocalDateTime startTime, LocalDateTime endTime, Long userId) {
-        return ordersMapper.list(orderNum,startTime,endTime,userId);
+        List<OrdersVO> list = ordersMapper.list(orderNum, startTime, endTime, userId);
+        SortUtil.sortOrdersList(list);
+        return list;
     }
 
     @Override
