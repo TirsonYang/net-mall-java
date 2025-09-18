@@ -19,6 +19,11 @@ public class ShoppingCartDTO implements Serializable {
     private Long productId;
 
     /**
+     * 用户id
+     */
+    private Long userId;
+
+    /**
      * 商品名称
      */
     private String productName;

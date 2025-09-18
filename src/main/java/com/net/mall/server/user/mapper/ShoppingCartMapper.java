@@ -20,7 +20,7 @@ public interface ShoppingCartMapper {
 
     void delete(Long id);
 
-    List<ShoppingCartVO> list();
+    List<ShoppingCartVO> list(Long userId);
 
     void clear(Long userId);
 }

@@ -1,5 +1,7 @@
 package com.net.mall.server.common.controller;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
+import com.net.mall.common.context.BaseContext;
 import com.net.mall.common.properties.JwtProperty;
 import com.net.mall.common.result.Result;
 import com.net.mall.common.utils.JwtUtil;
@@ -45,6 +47,9 @@ public class LoginController {
         vo.setToken(token);
         vo.setId(entity.getId());
         vo.setUsername(entity.getUsername());
+        BaseContext.setCurrentUserId(entity.getId());
+        log.info("用户登录成功:{}",vo);
+        log.info("localThread:{}", BaseContext.getCurrentUserId());
 
         return Result.success(vo);
     }

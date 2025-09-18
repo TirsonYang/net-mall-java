@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Service("userShoppingCartService")
@@ -30,8 +29,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCartEntity entity = shoppingCartMapper.getByUserIdAndProductId(dto);
 
         if (entity!=null){
-            dto.setNumber(entity.getNumber()+1);
-            this.update(dto);
+            // 如果购物车中已存在该商品，则增加商品数量
+            entity.setNumber(entity.getNumber()+1);
+            shoppingCartMapper.update(entity);
+            return; // 处理完直接返回，避免继续执行添加逻辑
         }
 
         ShoppingCartEntity cart = new ShoppingCartEntity();
@@ -40,8 +41,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ProductEntity product=productService.getById(dto.getProductId());
         cart.setProductName(product.getProductName());
         cart.setImageUrl(product.getImageUrl());
-        cart.setAmount(product.getPrice());
-        //TODO 登录功能后设置创建用户
+        cart.setPrice(product.getPrice());
+        if (cart.getUserId()==null){
+            cart.setUserId(BaseContext.getCurrentUserId());
+        }
         //TODO 登陆功能后绑定电脑机位
         cart.setCreateTime(LocalDateTime.now());
         shoppingCartMapper.add(cart);
@@ -60,10 +63,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public List<ShoppingCartVO> list() {
-        //TODO 登录功能完成后，获取当前用户id,根据userId查询购物车
-        List<ShoppingCartVO> list = shoppingCartMapper.list();
-        return list;
+    public List<ShoppingCartVO> list(Long userId) {
+        if (userId==null){
+            userId=BaseContext.getCurrentUserId();
+        }
+        return shoppingCartMapper.list(userId);
     }
 
     @Override

@@ -12,7 +12,7 @@ public interface ShoppingCartService {
 
     void delete(Long id);
 
-    List<ShoppingCartVO> list();
+    List<ShoppingCartVO> list(Long userId);
 
     void clear();
 }

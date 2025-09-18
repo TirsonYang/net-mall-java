@@ -52,9 +52,9 @@ public class ShoppingCartController {
     }
 
     @GetMapping("/list")
-    public Result<List<ShoppingCartVO>> list(){
+    public Result<List<ShoppingCartVO>> list(@RequestParam(required = false) Long userId){
         log.info("会员购物车列表");
-        List<ShoppingCartVO> list = shoppingCartService.list();
+        List<ShoppingCartVO> list = shoppingCartService.list(userId);
         return Result.success(list);
     }
 

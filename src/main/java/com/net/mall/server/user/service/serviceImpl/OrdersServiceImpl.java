@@ -92,7 +92,7 @@ public class OrdersServiceImpl implements OrdersService {
 
 
         //2、从购物车中获取商品信息后加入订单详情
-        List<ShoppingCartVO> cartList = shoppingCartService.list();
+        List<ShoppingCartVO> cartList = shoppingCartService.list(userId);
         for (ShoppingCartVO vo : cartList) {
             OrderDetailEntity detailEntity = new OrderDetailEntity();
             detailEntity.setProductId(vo.getProductId());
@@ -100,7 +100,7 @@ public class OrdersServiceImpl implements OrdersService {
             detailEntity.setProductName(vo.getProductName());
             detailEntity.setOrderId(entity.getId());
             detailEntity.setQuantity(vo.getNumber());
-            detailEntity.setAmount(vo.getAmount());
+            detailEntity.setAmount(vo.getPrice());
             orderDetailService.add(detailEntity);
         }
     }

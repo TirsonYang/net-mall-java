@@ -3,25 +3,30 @@
 <mapper namespace="com.net.mall.server.user.mapper.ShoppingCartMapper">
 
     <insert id="add">
+        insert into `net-mall`.shopping_cart values
+             (#{id},#{productId},#{productName},#{imageUrl},#{number},
+              #{price},#{userId},#{computerId},#{createTime})
 
     </insert>
     <update id="update">
         update `net-mall`.shopping_cart
         <set>
-            <if test="productName!=null">
+            <if test="productName != null and productName != ''">
                 product_name = #{productName},
             </if>
-            <if test="imageUrl!=null">
+            <if test="imageUrl != null and imageUrl != ''">
                 image_url = #{imageUrl},
             </if>
-            <if test="number!=null">
+            <if test="number != null">
                 number = #{number},
             </if>
-            <if test="amount!=null">
-                amount = #{amount},
+            <if test="price != null">
+                price = #{price},
             </if>
         </set>
-        where id=#{id}
+        <where>
+            id=#{id}
+        </where>
     </update>
 
     <delete id="delete">
@@ -39,6 +44,6 @@
 
 
     <select id="list" resultType="com.net.mall.pojo.vo.ShoppingCartVO">
-        select * from `net-mall`.shopping_cart where user_id=1
+        select * from `net-mall`.shopping_cart where user_id=#{userId}
     </select>
 </mapper>

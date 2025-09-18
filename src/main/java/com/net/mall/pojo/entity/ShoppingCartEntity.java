@@ -37,7 +37,7 @@ public class ShoppingCartEntity implements Serializable {
     /**
      * 商品单价
      */
-    private BigDecimal amount;
+    private BigDecimal price;
 
     /**
      * 会员id

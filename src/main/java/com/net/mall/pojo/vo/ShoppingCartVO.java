@@ -36,5 +36,5 @@ public class ShoppingCartVO implements Serializable {
     /**
      * 商品单价
      */
-    private BigDecimal amount;
+    private BigDecimal price;
 }
