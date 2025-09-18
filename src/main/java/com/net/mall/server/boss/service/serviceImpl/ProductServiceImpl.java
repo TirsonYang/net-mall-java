@@ -72,4 +72,9 @@ public class ProductServiceImpl implements ProductService {
         log.info("删除商品分类下的商品：{}",categoryId);
         productMapper.deleteByCategoryId(categoryId);
     }
+
+    @Override
+    public ProductVO findById(Long id) {
+        return productMapper.findById(id);
+    }
 }

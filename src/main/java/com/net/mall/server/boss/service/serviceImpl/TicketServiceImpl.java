@@ -36,7 +36,7 @@ public class TicketServiceImpl implements TicketService {
         if (entity.getExpireTime().isBefore(LocalDateTime.now())){
             entity.setStatus(2);
         }else {
-            entity.setStatus(0);
+            entity.setStatus(1);
         }
         ticketMapper.add(entity);
     }

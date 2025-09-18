@@ -47,4 +47,7 @@
     <select id="getCate" resultType="com.net.mall.pojo.vo.CateProVO">
         select id,category_name from `net-mall`.category
     </select>
+    <select id="getById" resultType="com.net.mall.pojo.vo.CategoryVO">
+        select * from `net-mall`.category where id=#{id}
+    </select>
 </mapper>

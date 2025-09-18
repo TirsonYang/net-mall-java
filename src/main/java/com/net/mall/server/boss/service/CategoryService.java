@@ -21,4 +21,6 @@ public interface CategoryService {
     List<CategoryVO> list();
 
     List<CateProVO> getCate();
+
+    CategoryVO getById(Long id);
 }

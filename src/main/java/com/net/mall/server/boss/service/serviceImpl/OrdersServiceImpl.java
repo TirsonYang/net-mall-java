@@ -48,7 +48,7 @@ public class OrdersServiceImpl implements OrdersService {
     public void export(HttpServletResponse response, String orderNum,LocalDateTime startTime,LocalDateTime endTime) {
         List<OrdersVO> list = list(orderNum,startTime,endTime);
         log.info("list:{}",list);
-        ExcelUtil.export(response,list);
+        ExcelUtil.export(response,list,orderNum,startTime,endTime);
     }
 
     @Override

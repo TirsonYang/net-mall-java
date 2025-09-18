@@ -22,4 +22,6 @@ public interface ProductService {
     List<ProductVO> list(Long categoryId);
 
     void deleteByCategoryId(Long categoryId);
+
+    ProductVO findById(Long id);
 }

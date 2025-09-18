@@ -89,4 +89,11 @@ public class CategoryController {
         return Result.success(list);
     }
 
+    @GetMapping("/getById")
+    public Result<CategoryVO> getById(@RequestParam Long id){
+        log.info("boss根据Id查询分类：{}",id);
+        CategoryVO vo=categoryService.getById(id);
+        return Result.success(vo);
+    }
+
 }

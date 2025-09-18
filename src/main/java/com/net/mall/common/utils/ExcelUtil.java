@@ -22,7 +22,7 @@ import java.util.zip.ZipOutputStream;
 @Slf4j
 public class ExcelUtil {
 
-    public static void export(HttpServletResponse response, List<OrdersVO> list) {
+    public static void export(HttpServletResponse response, List<OrdersVO> list,String orderNum,LocalDateTime startTime,LocalDateTime endTime) {
 
         String fileName = null;
         try {
@@ -70,8 +70,7 @@ public class ExcelUtil {
             XSSFCellStyle st = workbook.createCellStyle();
             st.setFont(headersFont);
 
-
-            XSSFRow row1 = sheet.createRow(1);
+            XSSFRow row1 = sheet.createRow(2);
             String[] headers = {"订单编号", "订单状态", "下单用户id", "机位id", "下单时间", "支付时间", "支付方式", "实际总价", "优惠金额", "原始价格", "下单手机号"};
             for (int i = 0; i < headers.length; i++) {
                 // 填充表头
@@ -80,7 +79,7 @@ public class ExcelUtil {
                 cell.setCellStyle(st);
             }
             for (int i=0;i<list.size();i++) {
-                XSSFRow row = sheet.createRow(i + 2);
+                XSSFRow row = sheet.createRow(i + 3);
                 row.createCell(0).setCellValue(list.get(i).getOrderNum());
                 row.createCell(1).setCellValue(switchStatus(list.get(i).getStatus()));
                 row.createCell(2).setCellValue(list.get(i).getUserId());
@@ -97,7 +96,7 @@ public class ExcelUtil {
                 row.createCell(9).setCellValue(list.get(i).getAmount().toString());
                 row.createCell(10).setCellValue(list.get(i).getPhone());
             }
-            XSSFRow tailRow = sheet.createRow(list.size() + 3);
+            XSSFRow tailRow = sheet.createRow(list.size() + 4);
             XSSFCell cell1 = tailRow.createCell(6);
 
             cell1.setCellValue("实际收入：");
@@ -156,8 +155,10 @@ private static String switchStatus(Integer i) {
         case 2:
             return "已付款";
         case 3:
-            return "已完成";
+            return "已送达";
         case 4:
+            return "已完成";
+        case 5:
             return "已取消";
         default:
             return "/";
@@ -170,6 +171,8 @@ private static String switchPayMethod(Integer i) {
             return "微信";
         case 2:
             return "支付宝";
+        case 3:
+            return "优惠券";
         default:
             return "/";
     }

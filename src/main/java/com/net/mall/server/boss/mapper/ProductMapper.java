@@ -25,4 +25,6 @@ public interface ProductMapper {
     List<ProductVO> getList(Long categoryId);
 
     void deleteByCategoryId(Long categoryId);
+
+    ProductVO findById(Long id);
 }

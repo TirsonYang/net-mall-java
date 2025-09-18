@@ -24,4 +24,6 @@ public interface CategoryMapper {
     List<CategoryVO> list();
 
     List<CateProVO> getCate();
+
+    CategoryVO getById(Long id);
 }

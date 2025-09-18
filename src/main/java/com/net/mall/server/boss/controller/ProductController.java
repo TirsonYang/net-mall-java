@@ -136,4 +136,12 @@ public class ProductController {
         return Result.success(finalFileName);
     }
 
+
+    @GetMapping("/findById")
+    public Result<ProductVO> getById(@RequestParam Long id){
+        log.info("boss根据id查询商品：{}",id);
+        ProductVO productVO = productService.findById(id);
+        return Result.success(productVO);
+    }
+
 }
