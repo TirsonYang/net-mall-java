@@ -19,6 +19,11 @@ public class TicketVO implements Serializable {
     private Long userId;
 
     /**
+     * 用户名
+     */
+    private String username;
+
+    /**
      * 商品ID
      */
     private Long productId;

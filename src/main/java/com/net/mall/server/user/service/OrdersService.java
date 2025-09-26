@@ -22,5 +22,5 @@ public interface OrdersService {
 
     void cancel(OrdersCancelDTO dto);
 
-    void orderByTicket(TicketEntity ticket,String phone,String remark,Long userId);
+    String orderByTicket(TicketEntity ticket,String phone,String remark,Long userId);
 }

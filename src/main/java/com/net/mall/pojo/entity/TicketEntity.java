@@ -18,6 +18,11 @@ public class TicketEntity {
     private Long userId;
 
     /**
+     * 用户名
+     */
+    private String username;
+
+    /**
      * 商品ID
      */
     private Long productId;
@@ -48,7 +53,7 @@ public class TicketEntity {
     private LocalDateTime expireTime;
 
     /**
-     * 订单ID
+     * 订单编号
      */
-    private Long orderId;
+    private String orderNum;
 }

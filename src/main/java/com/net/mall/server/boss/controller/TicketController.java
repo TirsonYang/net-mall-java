@@ -44,10 +44,7 @@ public class TicketController {
      * @return
      */
     @GetMapping("list")
-    public Result listById(@RequestParam Long userId){
-        if (userId==null){
-            return Result.error("参数错误!");
-        }
+    public Result<List<TicketVO>> listById(@RequestParam(required = false) Long userId){
         log.info("超管查询用户优惠券：{}",userId);
         List<TicketVO> list=ticketService.listById(userId);
         return Result.success(list);

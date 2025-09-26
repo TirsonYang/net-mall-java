@@ -12,6 +12,7 @@ import com.net.mall.pojo.vo.TicketVO;
 import com.net.mall.server.user.mapper.TicketMapper;
 import com.net.mall.server.user.service.OrdersService;
 import com.net.mall.server.user.service.TicketService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,8 +78,11 @@ public class TicketServiceImpl implements TicketService {
             ticketMapper.updateStatus(dto.getTicketId(),3);
             return 3;
         }
+        String orderNum = ordersService.orderByTicket(ticket,dto.getPhone(),dto.getRemark(),dto.getUserId());
+        TicketEntity entity = new TicketEntity();
+        BeanUtils.copyProperties(dto,entity);
+        entity.setOrderNum(orderNum);
         ticketMapper.updateStatus(dto.getTicketId(),2);
-        ordersService.orderByTicket(ticket,dto.getPhone(),dto.getRemark(),dto.getUserId());
         return 0;
     }
 }

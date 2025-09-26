@@ -11,7 +11,12 @@
         update `net-mall`.ticket set status= #{status} where ticket_id= #{ticketId}
     </update>
     <select id="listById" resultType="com.net.mall.pojo.vo.TicketVO">
-        select * from `net-mall`.ticket where user_id=#{userId}
+        select * from `net-mall`.ticket
+        <where>
+            <if test="userId!=null">
+                and user_id=#{userId}
+            </if>
+        </where>
     </select>
 
     <select id="pageById" resultType="com.net.mall.pojo.vo.TicketVO">

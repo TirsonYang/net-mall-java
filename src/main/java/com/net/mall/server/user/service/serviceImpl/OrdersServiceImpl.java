@@ -112,7 +112,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public void orderByTicket(TicketEntity ticket, String phone, String remark, Long userId) {
+    public String orderByTicket(TicketEntity ticket, String phone, String remark, Long userId) {
         ProductEntity product = productService.getById(ticket.getProductId());
         //配置实体类，插入订单表
         OrdersEntity entity = new OrdersEntity();
@@ -149,5 +149,6 @@ public class OrdersServiceImpl implements OrdersService {
         detailEntity.setQuantity(1);
         detailEntity.setAmount(new BigDecimal("0"));
         orderDetailService.add(detailEntity);
+        return entity.getOrderNum();
     }
 }
