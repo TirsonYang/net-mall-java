@@ -23,4 +23,6 @@ public interface TicketMapper {
     List<TicketEntity> listByStatus(Integer status);
 
     void updateStatus(Long ticketId, Integer status);
+
+    void addBatch(List<TicketEntity> list);
 }

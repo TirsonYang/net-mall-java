@@ -13,6 +13,11 @@ public class TicketDTO {
     private Long ticketId;
 
     /**
+     * 数量
+     */
+    private Integer number;
+
+    /**
      * 用户ID
      */
     private Long userId;

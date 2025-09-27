@@ -42,7 +42,11 @@ public class TicketServiceImpl implements TicketService {
             entity.setStatus(0);
         }
         entity.setCreateTime(LocalDateTime.now());
-        ticketMapper.add(entity);
+        List<TicketEntity> list = new ArrayList<>();
+        for (int i=0;i< dto.getNumber();i++) {
+            list.add(entity);
+        }
+        ticketMapper.addBatch(list);
     }
 
     @Override

@@ -7,6 +7,15 @@
         insert into `net-mall`.ticket (ticket_id,user_id, product_id, product_name, status, create_time, use_time, expire_time)
         values (#{ticketId},#{userId}, #{productId}, #{productName}, #{status}, #{createTime}, #{useTime}, #{expireTime})
     </insert>
+
+
+    <insert id="addBatch">
+        INSERT INTO `net-mall`.ticket (user_id, product_id, product_name, status, create_time, use_time, expire_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.userId}, #{item.productId}, #{item.productName}, #{item.status}, #{item.createTime}, #{item.useTime}, #{item.expireTime})
+        </foreach>
+    </insert>
     <update id="updateStatus">
         update `net-mall`.ticket set status= #{status} where ticket_id= #{ticketId}
     </update>

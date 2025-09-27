@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("bossTicketService")
@@ -29,6 +30,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void add(TicketDTO dto) {
         TicketEntity entity = new TicketEntity();
+        List<TicketEntity> list = new ArrayList<>();
         BeanUtils.copyProperties(dto,entity);
         ProductEntity product=productService.getById(dto.getProductId());
         entity.setProductName(product.getProductName());
@@ -38,7 +40,10 @@ public class TicketServiceImpl implements TicketService {
         }else {
             entity.setStatus(1);
         }
-        ticketMapper.add(entity);
+        for (int i = 0; i < dto.getNumber(); i++) {
+            list.add(entity);
+        }
+        ticketMapper.addBatch(list);
     }
 
     @Override

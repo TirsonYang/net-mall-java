@@ -23,4 +23,6 @@ public interface TicketMapper {
     Page<TicketVO> pageById(Long userId, PageQuery query);
 
     void updateStatus(Long ticketId, Integer status);
+
+    void addBatch(List<TicketEntity> list);
 }
