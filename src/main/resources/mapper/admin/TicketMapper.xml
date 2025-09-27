@@ -4,8 +4,8 @@
 
 
     <insert id="add">
-        insert into `net-mall`.ticket (ticket_id,user_id, product_id, product_name, status, create_time, use_time, expire_time, order_id)
-        values (#{ticketId},#{userId}, #{productId}, #{productName}, #{status}, #{createTime}, #{useTime}, #{expireTime}, #{orderId})
+        insert into `net-mall`.ticket (ticket_id,user_id, product_id, product_name, status, create_time, use_time, expire_time)
+        values (#{ticketId},#{userId}, #{productId}, #{productName}, #{status}, #{createTime}, #{useTime}, #{expireTime})
     </insert>
 
 <!--    批量添加-->
