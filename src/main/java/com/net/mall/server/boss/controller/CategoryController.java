@@ -33,6 +33,7 @@ public class CategoryController {
     @PostMapping("/add")
     public Result add(@RequestBody CategoryDTO dto){
         log.info("新增商品分类：{}",dto);
+        log.info("Thread:{}", Thread.currentThread().getId());
         if (dto==null){
             return Result.error("参数错误");
         }

@@ -51,6 +51,8 @@ public class LoginController {
         log.info("用户登录成功:{}",vo);
         log.info("localThread:{}", BaseContext.getCurrentUserId());
 
+        log.info("Thread:{}",Thread.currentThread().getId());
+
         return Result.success(vo);
     }
 
