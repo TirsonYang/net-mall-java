@@ -47,7 +47,7 @@ public class ExcelUtil {
             XSSFSheet sheet = workbook.createSheet();
             XSSFRow title = sheet.createRow(0);
 
-            sheet.setColumnWidth(0,4000); //订单编号
+            sheet.setColumnWidth(0,9000); //订单编号
             sheet.setColumnWidth(1,2500); //订单状态
             sheet.setColumnWidth(2,3000); //下单用户id
             sheet.setColumnWidth(3,2000); //机位id
@@ -80,21 +80,79 @@ public class ExcelUtil {
             }
             for (int i=0;i<list.size();i++) {
                 XSSFRow row = sheet.createRow(i + 3);
-                row.createCell(0).setCellValue(list.get(i).getOrderNum());
-                row.createCell(1).setCellValue(switchStatus(list.get(i).getStatus()));
-                row.createCell(2).setCellValue(list.get(i).getUserId());
-                row.createCell(3).setCellValue(list.get(i).getComputerId());
-                row.createCell(4).setCellValue(list.get(i).getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+                if (list.get(i).getOrderNum()==null){
+                    row.createCell(0).setCellValue("/");
+                }else {
+                    row.createCell(0).setCellValue(list.get(i).getOrderNum());
+                }
+
+                if (list.get(i).getStatus()==null){
+                    row.createCell(1).setCellValue("/");
+                }else {
+                    row.createCell(1).setCellValue(switchStatus(list.get(i).getStatus()));
+                }
+
+                if (list.get(i).getUserId()==null){
+                    row.createCell(2).setCellValue("/");
+                }else {
+                    row.createCell(2).setCellValue(list.get(i).getUserId());
+                }
+
+                if (list.get(i).getComputerId()==null){
+                    row.createCell(3).setCellValue("/");
+                }else {
+                    row.createCell(3).setCellValue(list.get(i).getComputerId());
+                }
+
+                if (list.get(i).getOrderTime()==null){
+                    row.createCell(4).setCellValue("/");
+                }else {
+                    row.createCell(4).setCellValue(list.get(i).getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                }
+
                 if (list.get(i).getCheckoutTime() == null) {
                     row.createCell(5).setCellValue("/");
                 } else {
                     row.createCell(5).setCellValue(list.get(i).getCheckoutTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 }
-                row.createCell(6).setCellValue(switchPayMethod(list.get(i).getPayMethod()));
-                row.createCell(7).setCellValue(list.get(i).getTotal().toString());
-                row.createCell(8).setCellValue(list.get(i).getPreference().toString());
-                row.createCell(9).setCellValue(list.get(i).getAmount().toString());
-                row.createCell(10).setCellValue(list.get(i).getPhone());
+
+                if (list.get(i).getPayMethod() == null) {
+                    row.createCell(6).setCellValue("/");
+                } else {
+                    row.createCell(6).setCellValue(switchPayMethod(list.get(i).getPayMethod()));
+                }
+
+                if (list.get(i).getTotal() == null) {
+                    row.createCell(7).setCellValue("/");
+                } else {
+                    row.createCell(7).setCellValue(list.get(i).getTotal().toString());
+                }
+
+                if (list.get(i).getTotal() == null) {
+                    row.createCell(8).setCellValue("/");
+                } else {
+                    row.createCell(8).setCellValue(list.get(i).getTotal().toString());
+                }
+
+                if (list.get(i).getPreference() == null) {
+                    row.createCell(8).setCellValue("/");
+                } else {
+                    row.createCell(8).setCellValue(list.get(i).getPreference().toString());
+                }
+
+                if (list.get(i).getAmount() == null) {
+                    row.createCell(9).setCellValue("/");
+                } else {
+                    row.createCell(9).setCellValue(list.get(i).getAmount().toString());
+                }
+
+                if (list.get(i).getPhone() == null) {
+                    row.createCell(10).setCellValue("/");
+                } else {
+                    row.createCell(10).setCellValue(list.get(i).getPhone());
+                }
+
             }
             XSSFRow tailRow = sheet.createRow(list.size() + 4);
             XSSFCell cell1 = tailRow.createCell(6);
