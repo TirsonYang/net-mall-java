@@ -6,6 +6,7 @@ import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.utils.OrderNumGenerateUtil;
 import com.net.mall.common.utils.SortUtil;
+import com.net.mall.pojo.dto.OrderDetailDTO;
 import com.net.mall.pojo.dto.OrdersCancelDTO;
 import com.net.mall.pojo.dto.OrdersDTO;
 import com.net.mall.pojo.entity.OrderDetailEntity;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("userOrdersService")
@@ -65,7 +67,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public void add(OrdersDTO dto) {
+    public Long add(OrdersDTO dto) {
         //1、生成订单号、新增订单
         OrdersEntity entity = new OrdersEntity();
         BeanUtils.copyProperties(dto,entity);
@@ -76,10 +78,11 @@ public class OrdersServiceImpl implements OrdersService {
         entity.setUserId(userId);
         entity.setComputerId(computerId);
         entity.setOrderTime(LocalDateTime.now());
+        entity.setStatus(1);
         ordersMapper.add(entity);
 
 
-        //websocket发送信息 提示来单
+        //TODO websocket发送信息 提示来单 修改到支付后
 
         OrderMessageVO messageVO=new OrderMessageVO();
         messageVO.setContent("您有新的订单，请及时配送");
@@ -90,19 +93,26 @@ public class OrdersServiceImpl implements OrdersService {
         webSocketServer.send(messageVO);
 
 
+        // 清空购物车
+        shoppingCartService.clear();
+
+
 
         //2、从购物车中获取商品信息后加入订单详情
-        List<ShoppingCartVO> cartList = shoppingCartService.list(userId);
-        for (ShoppingCartVO vo : cartList) {
-            OrderDetailEntity detailEntity = new OrderDetailEntity();
-            detailEntity.setProductId(vo.getProductId());
-            detailEntity.setImageUrl(vo.getImageUrl());
-            detailEntity.setProductName(vo.getProductName());
-            detailEntity.setOrderId(entity.getId());
-            detailEntity.setQuantity(vo.getNumber());
-            detailEntity.setAmount(vo.getPrice());
-            orderDetailService.add(detailEntity);
-        }
+//        List<ShoppingCartVO> cartList = shoppingCartService.list(userId);
+//        List<OrderDetailDTO> detailList=new ArrayList<>();
+//        for (ShoppingCartVO vo : cartList) {
+//            OrderDetailDTO detailDTO = new OrderDetailDTO();
+//            detailDTO.setProductId(vo.getProductId());
+//            detailDTO.setImageUrl(vo.getImageUrl());
+//            detailDTO.setProductName(vo.getProductName());
+//            detailDTO.setOrderId(entity.getId());
+//            detailDTO.setQuantity(vo.getNumber());
+//            detailDTO.setAmount(vo.getPrice());
+//            detailList.add(detailDTO);
+//        }
+//        orderDetailService.addList(detailList);
+        return entity.getId();
     }
 
     @Override
@@ -141,14 +151,16 @@ public class OrdersServiceImpl implements OrdersService {
         webSocketServer.send(messageVO);
 
         //配置实体类，插入订单明细表
-        OrderDetailEntity detailEntity = new OrderDetailEntity();
-        detailEntity.setProductId(product.getId());
-        detailEntity.setProductName(product.getProductName());
-        detailEntity.setImageUrl(product.getImageUrl());
-        detailEntity.setOrderId(entity.getId());
-        detailEntity.setQuantity(1);
-        detailEntity.setAmount(new BigDecimal("0"));
-        orderDetailService.add(detailEntity);
+        OrderDetailDTO detailDTO = new OrderDetailDTO();
+        detailDTO.setProductId(product.getId());
+        detailDTO.setProductName(product.getProductName());
+        detailDTO.setImageUrl(product.getImageUrl());
+        detailDTO.setOrderId(entity.getId());
+        detailDTO.setQuantity(1);
+        detailDTO.setAmount(new BigDecimal("0"));
+        List<OrderDetailDTO> list=new ArrayList<>();
+        list.add(detailDTO);
+        orderDetailService.addList(list);
         return entity.getOrderNum();
     }
 }

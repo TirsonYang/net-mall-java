@@ -18,7 +18,7 @@ public interface OrdersService {
 
     List<OrdersVO> detail(Long id);
 
-    void add(OrdersDTO dto);
+    Long add(OrdersDTO dto);
 
     void cancel(OrdersCancelDTO dto);
 

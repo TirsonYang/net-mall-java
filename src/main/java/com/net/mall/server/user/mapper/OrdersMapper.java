@@ -19,7 +19,7 @@ public interface OrdersMapper {
 
     Page<OrdersVO> page(PageQuery pageQuery, Long userId);
 
-    void add(OrdersEntity entity);
+    Long add(OrdersEntity entity);
 
     void cancel(OrdersCancelDTO dto, LocalDateTime cancelTime);
 }

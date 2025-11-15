@@ -4,9 +4,9 @@ server:
 
 logging:
   level:
-    com.net.mall.server.boss.mapper: debug
-    com.net.mall.server.admin.mapper: debug
-    com.net.mall.server.user.mapper: debug
+    com.net.mall.server.boss.mapper: info
+    com.net.mall.server.admin.mapper: info
+    com.net.mall.server.user.mapper: info
 
 spring:
   servlet:
@@ -51,3 +51,13 @@ pictureFile:
   path: ${pictureFile.path-dev}
   path-mapping: ${pictureFile.path-mapping-dev}
   url: ${pictureFile.url-dev}
+
+
+# 微信支付
+wechat:
+  pay:
+    appId: ${wechat.appId}
+    merchantId: ${wechat.merchantId}
+    apikey: ${wechat.apiKey}
+    notifyUrl: ${wechat.url}
+    privateKeyPath: ${wechat.privateKeyPath}

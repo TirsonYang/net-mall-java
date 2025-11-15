@@ -2,9 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.net.mall.server.user.mapper.OrderDetailMapper">
 
-    <insert id="add">
-        insert into `net-mall`.order_detail (order_id,product_id,product_name,image_url,quantity,amount)
-        values(#{orderId},#{productId},#{productName},#{imageUrl},#{quantity},#{amount})
+    <insert id="addList">
+        insert into order_detail (
+            product_id,product_name,image_url,order_id,quantity,amount
+        )
+        values
+        <foreach collection="entities"
+                 item="item"
+                 separator=",">
+            (
+             #{item.productId},#{item.productName},#{item.imageUrl},#{item.orderId},#{item.quantity},#{item.amount}
+            )
+        </foreach>
+
+
+
     </insert>
 
 

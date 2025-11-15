@@ -49,10 +49,10 @@ public class OrdersController {
     }
 
     @PostMapping("/add")
-    public Result add(@RequestBody OrdersDTO dto){
+    public Result<Long> add(@RequestBody OrdersDTO dto){
         log.info("会员订单新增：{}",dto);
-        ordersService.add(dto);
-        return Result.success();
+        Long orderId=ordersService.add(dto);
+        return Result.success(orderId);
     }
 
     @PostMapping("/cancel")
@@ -63,6 +63,8 @@ public class OrdersController {
     }
 
     //TODO 会员订单支付
+
+
 
 
 }
