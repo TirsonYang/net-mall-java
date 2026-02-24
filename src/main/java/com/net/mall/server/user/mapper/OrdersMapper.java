@@ -22,4 +22,6 @@ public interface OrdersMapper {
     Long add(OrdersEntity entity);
 
     void cancel(OrdersCancelDTO dto, LocalDateTime cancelTime);
+
+    OrdersEntity getById(Long orderId);
 }

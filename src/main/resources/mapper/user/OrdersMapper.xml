@@ -33,4 +33,7 @@
     <select id="page" resultType="com.net.mall.pojo.vo.OrdersVO">
         select * from `net-mall`.orders where user_id=#{userId}
     </select>
+    <select id="getById" resultType="com.net.mall.pojo.entity.OrdersEntity">
+        select * from `net-mall`.orders where id=#{orderId}
+    </select>
 </mapper>

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -63,6 +64,13 @@ public class OrdersController {
     }
 
     //TODO 会员订单支付
+
+    @PostMapping("/alipayCreate/{orderId}")
+    public Result<String> alipayCreate(@PathVariable Long orderId){
+        log.info("会员订单支付宝创建：{}",orderId);
+        String result=ordersService.alipayCreate(orderId);
+        return Result.success(result);
+    }
 
 
 

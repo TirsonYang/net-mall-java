@@ -1,5 +1,11 @@
 package com.net.mall.server.user.service.serviceImpl;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.domain.AlipayTradePagePayModel;
+import com.alipay.api.domain.GoodsDetail;
+import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.net.mall.common.params.PageQuery;
@@ -9,10 +15,10 @@ import com.net.mall.common.utils.SortUtil;
 import com.net.mall.pojo.dto.OrderDetailDTO;
 import com.net.mall.pojo.dto.OrdersCancelDTO;
 import com.net.mall.pojo.dto.OrdersDTO;
-import com.net.mall.pojo.entity.OrderDetailEntity;
 import com.net.mall.pojo.entity.OrdersEntity;
 import com.net.mall.pojo.entity.ProductEntity;
 import com.net.mall.pojo.entity.TicketEntity;
+import com.net.mall.pojo.vo.OrderDetailVO;
 import com.net.mall.pojo.vo.OrderMessageVO;
 import com.net.mall.pojo.vo.OrdersVO;
 import com.net.mall.pojo.vo.ShoppingCartVO;
@@ -25,6 +31,7 @@ import com.net.mall.server.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -44,6 +51,9 @@ public class OrdersServiceImpl implements OrdersService {
     private ProductService productService;
     @Autowired
     private WebSocketServer webSocketServer;
+
+    @Autowired
+    private AlipayClient client;
 
     @Override
     public List<OrdersVO> list(String orderNum, LocalDateTime startTime, LocalDateTime endTime, Long userId) {
@@ -163,4 +173,79 @@ public class OrdersServiceImpl implements OrdersService {
         orderDetailService.addList(list);
         return entity.getOrderNum();
     }
+
+    @Transactional
+    @Override
+    public String alipayCreate(Long orderId) {
+
+
+        List<OrderDetailVO> list = orderDetailService.getByOrderId(orderId);
+        OrdersEntity entity = ordersMapper.getById(orderId);
+
+        // 构造请求参数以调用接口
+        AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
+        AlipayTradePagePayModel model = new AlipayTradePagePayModel();
+
+        // 设置商户订单号
+        model.setOutTradeNo(String.valueOf(orderId));
+
+        // 设置订单总金额
+        model.setTotalAmount(String.valueOf(entity.getAmount()));
+
+        // 设置订单标题
+        model.setSubject("测试订单");
+
+        // 设置产品码
+        model.setProductCode("FAST_INSTANT_TRADE_PAY");
+
+        // 设置PC扫码支付的方式
+//        model.setQrPayMode("1");
+
+        // 设置商户自定义二维码宽度
+//        model.setQrcodeWidth(100L);
+
+        // 设置订单包含的商品列表信息
+        List<GoodsDetail> goodsDetail = new ArrayList<GoodsDetail>();
+        for(OrderDetailVO vo : list){
+            GoodsDetail goodsDetail0 = new GoodsDetail();
+            goodsDetail0.setGoodsName(vo.getProductName());
+//            goodsDetail0.setAlipayGoodsId(String.valueOf(vo.getProductId()));
+            goodsDetail0.setQuantity(Long.valueOf(vo.getQuantity()));
+            goodsDetail0.setPrice(String.valueOf(vo.getAmount()));
+            goodsDetail0.setGoodsId(String.valueOf(vo.getProductId()));
+            goodsDetail0.setGoodsCategory(vo.getProductName());
+//            goodsDetail0.setCategoriesTree("124868003|126232002|126252004");
+//            goodsDetail0.setShowUrl("http://www.alipay.com/xxx.jpg");
+            goodsDetail.add(goodsDetail0);
+        }
+        model.setGoodsDetail(goodsDetail);
+
+        request.setBizModel(model);
+        // 第三方代调用模式下请设置app_auth_token
+        // request.putOtherTextParam("app_auth_token", "<-- 请填写应用授权令牌 -->");
+
+        AlipayTradePagePayResponse response = null;
+        try {
+            response = client.pageExecute(request, "POST");
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        // 如果需要返回GET请求，请使用
+        // AlipayTradePagePayResponse response = alipayClient.pageExecute(request, "GET");
+        String pageRedirectionData = response.getBody();
+        System.out.println(pageRedirectionData);
+
+        if (response.isSuccess()) {
+            System.out.println("调用成功");
+        } else {
+            System.out.println("调用失败");
+            // sdk版本是"4.38.0.ALL"及以上,可以参考下面的示例获取诊断链接
+            // String diagnosisUrl = DiagnosisUtils.getDiagnosisUrl(response);
+            // System.out.println(diagnosisUrl);
+        }
+        return response.getBody();
+    }
+
+
 }

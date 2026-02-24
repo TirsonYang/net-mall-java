@@ -23,4 +23,7 @@
     <select id="list" resultType="com.net.mall.pojo.vo.OrdersVO">
         select * from `net-mall`.order_detail where order_id=#{orderId}
     </select>
+    <select id="getByOrderId" resultType="com.net.mall.pojo.vo.OrderDetailVO">
+        select * from `net-mall`.order_detail where order_id=#{orderId}
+    </select>
 </mapper>

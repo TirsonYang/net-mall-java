@@ -23,4 +23,6 @@ public interface OrdersService {
     void cancel(OrdersCancelDTO dto);
 
     String orderByTicket(TicketEntity ticket,String phone,String remark,Long userId);
+
+    String alipayCreate(Long orderId);
 }
