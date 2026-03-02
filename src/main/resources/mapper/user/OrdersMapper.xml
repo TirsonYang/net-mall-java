@@ -10,6 +10,9 @@
     <update id="cancel">
         update `net-mall`.orders set status=5,cancel_reason=#{cancelReason},cancel_time=#{cancelTime} where id=#{id}
     </update>
+    <update id="updateStatusById">
+        update `net-mall`.orders set status=#{status} where id=#{orderId}
+    </update>
 
 
     <select id="list" resultType="com.net.mall.pojo.vo.OrdersVO">
@@ -35,5 +38,8 @@
     </select>
     <select id="getById" resultType="com.net.mall.pojo.entity.OrdersEntity">
         select * from `net-mall`.orders where id=#{orderId}
+    </select>
+    <select id="queryIdByOrderNum" resultType="java.lang.String">
+        select id from `net-mall`.orders where order_num=#{orderNum}
     </select>
 </mapper>

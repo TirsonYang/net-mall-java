@@ -26,4 +26,10 @@
     <select id="getByOrderId" resultType="com.net.mall.pojo.vo.OrderDetailVO">
         select * from `net-mall`.order_detail where order_id=#{orderId}
     </select>
+    <select id="queryByOrderNum" resultType="com.net.mall.pojo.vo.OrderDetailVO">
+        select * from `net-mall`.order_detail where order_num= #{orderNum}
+    </select>
+    <select id="queryByOrderNumAndComputerId" resultType="com.net.mall.pojo.vo.OrderDetailVO">
+        select * from `net-mall`.order_detail where order_id= #{orderId} and computer_id = #{computerId}
+    </select>
 </mapper>

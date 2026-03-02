@@ -24,4 +24,8 @@ public interface OrdersMapper {
     void cancel(OrdersCancelDTO dto, LocalDateTime cancelTime);
 
     OrdersEntity getById(Long orderId);
+
+    void updateStatusById(Long orderId, int status);
+
+    String queryIdByOrderNum(String orderNum);
 }

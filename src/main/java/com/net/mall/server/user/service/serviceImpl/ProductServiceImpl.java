@@ -11,6 +11,8 @@ import com.net.mall.server.user.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service("userProductService")
 public class ProductServiceImpl implements ProductService {
 
@@ -27,5 +29,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductEntity getById(Long productId) {
         return productMapper.getById(productId);
+    }
+
+    @Override
+    public void reduceStock(ArrayList<ProductEntity> products) {
+        productMapper.reduceStock(products);
     }
 }

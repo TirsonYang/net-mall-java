@@ -4,14 +4,17 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.domain.GoodsDetail;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.net.mall.common.exception.BaseException;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
 import com.net.mall.common.utils.OrderNumGenerateUtil;
 import com.net.mall.common.utils.SortUtil;
+import com.net.mall.pojo.dto.DetailQueryDTO;
 import com.net.mall.pojo.dto.OrderDetailDTO;
 import com.net.mall.pojo.dto.OrdersCancelDTO;
 import com.net.mall.pojo.dto.OrdersDTO;
@@ -21,22 +24,18 @@ import com.net.mall.pojo.entity.TicketEntity;
 import com.net.mall.pojo.vo.OrderDetailVO;
 import com.net.mall.pojo.vo.OrderMessageVO;
 import com.net.mall.pojo.vo.OrdersVO;
-import com.net.mall.pojo.vo.ShoppingCartVO;
 import com.net.mall.server.user.mapper.OrdersMapper;
-import com.net.mall.server.user.service.OrderDetailService;
-import com.net.mall.server.user.service.OrdersService;
-import com.net.mall.server.user.service.ProductService;
-import com.net.mall.server.user.service.ShoppingCartService;
+import com.net.mall.server.user.service.*;
 import com.net.mall.server.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service("userOrdersService")
 public class OrdersServiceImpl implements OrdersService {
@@ -51,6 +50,8 @@ public class OrdersServiceImpl implements OrdersService {
     private ProductService productService;
     @Autowired
     private WebSocketServer webSocketServer;
+    @Autowired
+    private ComputerService computerService;
 
     @Autowired
     private AlipayClient client;
@@ -82,29 +83,14 @@ public class OrdersServiceImpl implements OrdersService {
         OrdersEntity entity = new OrdersEntity();
         BeanUtils.copyProperties(dto,entity);
         entity.setOrderNum(OrderNumGenerateUtil.generateOrderId());
-        //TODO 登录功能完成后，获取当前用户id和电脑机位id
-        Long userId=1L;
-        Long computerId=100L;
-        entity.setUserId(userId);
-        entity.setComputerId(computerId);
         entity.setOrderTime(LocalDateTime.now());
+        // 状态 1 待付款
         entity.setStatus(1);
         ordersMapper.add(entity);
 
 
-        //TODO websocket发送信息 提示来单 修改到支付后
-
-        OrderMessageVO messageVO=new OrderMessageVO();
-        messageVO.setContent("您有新的订单，请及时配送");
-        messageVO.setType("order");
-        messageVO.setOrderNum(entity.getOrderNum());
-        messageVO.setTimestamp(System.currentTimeMillis());
-
-        webSocketServer.send(messageVO);
-
-
         // 清空购物车
-        shoppingCartService.clear();
+        shoppingCartService.clear(dto.getComputerId());
 
 
 
@@ -125,6 +111,8 @@ public class OrdersServiceImpl implements OrdersService {
         return entity.getId();
     }
 
+
+
     @Override
     public void cancel(OrdersCancelDTO dto) {
         LocalDateTime now= LocalDateTime.now();
@@ -138,7 +126,7 @@ public class OrdersServiceImpl implements OrdersService {
         OrdersEntity entity = new OrdersEntity();
         entity.setOrderNum(OrderNumGenerateUtil.generateOrderId());
         entity.setStatus(2);
-        entity.setComputerId(1L);
+//        entity.setComputerId(1L);
         entity.setUserId(userId);
         entity.setOrderTime(LocalDateTime.now());
         entity.setCheckoutTime(LocalDateTime.now());
@@ -152,13 +140,7 @@ public class OrdersServiceImpl implements OrdersService {
 
 
         //websocket发送信息 提示来单
-        OrderMessageVO messageVO =new OrderMessageVO();
-        messageVO.setContent("您有新的订单，请及时配送");
-        messageVO.setType("order");
-        messageVO.setOrderNum(entity.getOrderNum());
-        messageVO.setTimestamp(System.currentTimeMillis());
-
-        webSocketServer.send(messageVO);
+        sendMessage(entity);
 
         //配置实体类，插入订单明细表
         OrderDetailDTO detailDTO = new OrderDetailDTO();
@@ -198,6 +180,7 @@ public class OrdersServiceImpl implements OrdersService {
         // 设置产品码
         model.setProductCode("FAST_INSTANT_TRADE_PAY");
 
+
         // 设置PC扫码支付的方式
 //        model.setQrPayMode("1");
 
@@ -221,6 +204,10 @@ public class OrdersServiceImpl implements OrdersService {
         model.setGoodsDetail(goodsDetail);
 
         request.setBizModel(model);
+//        String returnUrl = "http://localhost:16444/#/user/url?orderNum=" + entity.getOrderNum();
+//        request.setReturnUrl(returnUrl);
+        request.setReturnUrl("http://localhost:16444/#/user/product");
+        request.setNotifyUrl("http://2d106d06.r10.cpolar.top/user/orders/alipayNotify");
         // 第三方代调用模式下请设置app_auth_token
         // request.putOtherTextParam("app_auth_token", "<-- 请填写应用授权令牌 -->");
 
@@ -237,6 +224,8 @@ public class OrdersServiceImpl implements OrdersService {
         System.out.println(pageRedirectionData);
 
         if (response.isSuccess()) {
+//            ordersMapper.updateStatusById(orderId,2);
+//            sendMessage(entity);
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");
@@ -248,4 +237,74 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
 
+    /**
+     * 支付宝异步通知处理方法
+     */
+    public void handleAlipayNotify(HttpServletRequest request) {
+        // 验证通知签名
+        Map<String, String> params = new HashMap<>();
+        Map<String, String[]> requestParams = request.getParameterMap();
+        for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            String name = iter.next();
+            String[] values = requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
+            }
+            params.put(name, valueStr);
+        }
+
+        String alipayPublicKey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArSeeZ7RwV29w5L7uiRrUQA2SjHZYgurZfDUfD4xgN7DwB1yua++M7x4IXkOC8ikRu6BguMAhGnFdqOcmo4wQnb+Fj6b0NtQffVtR9tyMCv2kyT2RTZtyOEhmI1KY0UN8/9z6b70KIdkJHVfJ1JTpjWwjZJ8M4F1je5Ietjhr11XyfCXC01yDuKUJb9QClLIJkXOllwnB6gIcb+ZVVormfjCH3eL8NrZvqRcQRXWmE7CzFucA27/ZkZAki6gIQANmtwQrJU2GeQ514/1LgCMPzUHAI2i0JmDSGa+dtaaqb5GCl/BtNeuX30oWt/x0D4CYARR/2JoVXeLOO4autdX3AQIDAQAB";
+
+        try {
+            boolean verifyResult = AlipaySignature.rsaCheckV1(params, alipayPublicKey, "UTF-8", "RSA2");
+
+            if(verifyResult){
+                // 验证成功
+                String tradeStatus = params.get("trade_status");
+                String outTradeNo = params.get("out_trade_no");
+
+                if("TRADE_SUCCESS".equals(tradeStatus) || "TRADE_FINISHED".equals(tradeStatus)){
+                    // 支付成功，更新订单状态并发送消息
+                    Long orderId = Long.valueOf(outTradeNo);
+                    ordersMapper.updateStatusById(orderId, 2); // 更新为已付款状态
+
+                    // 获取订单信息并发送通知
+                    OrdersEntity entity = ordersMapper.getById(orderId);
+                    sendMessage(entity);
+
+                    System.out.println("支付成功，订单ID: " + orderId);
+                }
+            } else {
+                System.out.println("支付宝异步通知验证失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<OrderDetailVO> getByOrderNum(DetailQueryDTO dto) {
+        if(dto.getOrderNum()==null|| dto.getOrderNum().isEmpty()) throw new BaseException("参数错误");
+        String regex = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+
+        boolean isValid = dto.getComputerId().matches(regex);
+        String computerId = null;
+        if(!isValid) {
+            computerId = computerService.queryByNum(dto.getComputerId());
+        }
+        String orderId = ordersMapper.queryIdByOrderNum(dto.getOrderNum());
+        return computerId==null? orderDetailService.queryByOrderNumAndComputerId(orderId,dto.getComputerId())
+                :orderDetailService.queryByOrderNumAndComputerId(orderId,computerId);
+
+    }
+
+    private void sendMessage(OrdersEntity entity) {
+        OrderMessageVO messageVO=new OrderMessageVO();
+        messageVO.setContent("您有新的订单，请及时配送");
+        messageVO.setType("order");
+        messageVO.setOrderNum(entity.getOrderNum());
+        messageVO.setTimestamp(System.currentTimeMillis());
+        webSocketServer.send(messageVO);
+    }
 }

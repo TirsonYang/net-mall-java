@@ -3,6 +3,19 @@
 <mapper namespace="com.net.mall.server.user.mapper.ProductMapper">
 
 
+    <update id="reduceStock">
+        UPDATE `net-mall`.product
+        SET stock = stock -
+        <foreach collection="products" item="product"  open="CASE id " close=" END">
+            WHEN #{product.id} THEN #{product.stock}
+        </foreach>
+        WHERE id IN
+        <foreach collection="products" item="product" open="(" separator="," close=")">
+            #{product.id}
+        </foreach>
+    </update>
+
+
     <select id="page" resultType="com.net.mall.pojo.vo.ProductVO">
         select * from `net-mall`.product where category_id=#{categoryId}
     </select>

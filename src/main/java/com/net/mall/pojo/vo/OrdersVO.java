@@ -32,7 +32,7 @@ public class OrdersVO implements Serializable {
     /**
      * 电脑机位id
      */
-    private Long computerId;
+    private String computerId;
 
     /**
      * 下单时间

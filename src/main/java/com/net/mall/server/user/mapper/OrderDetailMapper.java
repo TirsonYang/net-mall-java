@@ -18,4 +18,8 @@ public interface OrderDetailMapper {
     void addList(@Param("entities") List<OrderDetailEntity> entities);
 
     List<OrderDetailVO> getByOrderId(Long orderId);
+
+    List<OrderDetailVO> queryByOrderNum(String orderNum);
+
+    List<OrderDetailVO> queryByOrderNumAndComputerId(String orderId, String computerId);
 }

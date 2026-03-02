@@ -10,9 +10,9 @@ public interface ShoppingCartService {
 
     void update(ShoppingCartDTO dto);
 
-    void delete(Long id);
+    void delete(Long id,String computerId);
 
-    List<ShoppingCartVO> list(Long userId);
+    List<ShoppingCartVO> list(String computerId);
 
-    void clear();
+    void clear(String computerId);
 }

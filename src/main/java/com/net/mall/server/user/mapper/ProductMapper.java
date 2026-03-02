@@ -7,6 +7,8 @@ import com.net.mall.pojo.vo.ProductVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Mapper
 @Component("userProductMapper")
 public interface ProductMapper {
@@ -14,4 +16,6 @@ public interface ProductMapper {
     Page<ProductVO> page(PageQuery query, Long categoryId);
 
     ProductEntity getById(Long productId);
+
+    void reduceStock(ArrayList<ProductEntity> products);
 }

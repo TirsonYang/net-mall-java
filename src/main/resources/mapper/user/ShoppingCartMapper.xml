@@ -34,7 +34,7 @@
     </delete>
 
     <delete id="clear">
-        delete from `net-mall`.shopping_cart where user_id=#{userId}
+        delete from `net-mall`.shopping_cart where computer_id=#{computerId}
     </delete>
 
 
@@ -44,6 +44,9 @@
 
 
     <select id="list" resultType="com.net.mall.pojo.vo.ShoppingCartVO">
-        select * from `net-mall`.shopping_cart where user_id=#{userId}
+        select * from `net-mall`.shopping_cart where computer_id=#{computerId}
+    </select>
+    <select id="getById" resultType="com.net.mall.pojo.entity.ShoppingCartEntity">
+        select * from `net-mall`.shopping_cart where id=#{id}
     </select>
 </mapper>

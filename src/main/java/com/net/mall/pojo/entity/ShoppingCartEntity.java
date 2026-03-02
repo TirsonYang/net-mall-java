@@ -47,7 +47,7 @@ public class ShoppingCartEntity implements Serializable {
     /**
      * 电脑id
      */
-    private Long computerId;
+    private String computerId;
 
     /**
      * 创建时间

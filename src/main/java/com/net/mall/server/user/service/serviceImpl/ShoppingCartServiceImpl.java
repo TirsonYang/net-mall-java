@@ -2,15 +2,16 @@ package com.net.mall.server.user.service.serviceImpl;
 
 import com.net.mall.common.context.BaseContext;
 import com.net.mall.pojo.dto.ShoppingCartDTO;
-import com.net.mall.pojo.entity.ProductEntity;
 import com.net.mall.pojo.entity.ShoppingCartEntity;
 import com.net.mall.pojo.vo.ShoppingCartVO;
 import com.net.mall.server.user.mapper.ShoppingCartMapper;
 import com.net.mall.server.user.service.ProductService;
 import com.net.mall.server.user.service.ShoppingCartService;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +26,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private ProductService productService;
 
     @Override
+    @Transactional
     public void add(ShoppingCartDTO dto) {
         ShoppingCartEntity entity = shoppingCartMapper.getByUserIdAndProductId(dto);
 
@@ -38,12 +40,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCartEntity cart = new ShoppingCartEntity();
         BeanUtils.copyProperties(dto,cart);
 
-        ProductEntity product=productService.getById(dto.getProductId());
-        cart.setProductName(product.getProductName());
-        cart.setImageUrl(product.getImageUrl());
-        cart.setPrice(product.getPrice());
-        if (cart.getUserId()==null){
-            cart.setUserId(BaseContext.getCurrentUserId());
+//        ProductEntity product=productService.getById(dto.getProductId());
+//        cart.setProductName(product.getProductName());
+//        cart.setImageUrl(product.getImageUrl());
+//        cart.setPrice(product.getPrice());
+        if (cart.getComputerId()==null|| Strings.isEmpty(cart.getComputerId())){
+            throw new RuntimeException("请选择电脑机位");
         }
         //TODO 登陆功能后绑定电脑机位
         cart.setCreateTime(LocalDateTime.now());
@@ -58,22 +60,25 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id, String computerId) {
+        ShoppingCartEntity entity = shoppingCartMapper.getById(id);
+        if(!entity.getComputerId().equals(computerId)){
+            throw new RuntimeException("参数错误");
+        }
         shoppingCartMapper.delete(id);
     }
 
     @Override
-    public List<ShoppingCartVO> list(Long userId) {
-        if (userId==null){
-            userId=BaseContext.getCurrentUserId();
+    public List<ShoppingCartVO> list(String computerId) {
+        if (computerId ==null||Strings.isEmpty(computerId)){
+            throw new RuntimeException("请选择电脑机位");
         }
-        return shoppingCartMapper.list(userId);
+        return shoppingCartMapper.list(computerId);
     }
 
     @Override
-    public void clear() {
-        Long userId= BaseContext.getCurrentUserId();
-        shoppingCartMapper.clear(userId);
+    public void clear(String computerId) {
+        shoppingCartMapper.clear(computerId);
     }
 
 

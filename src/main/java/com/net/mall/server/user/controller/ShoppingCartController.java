@@ -45,23 +45,23 @@ public class ShoppingCartController {
     }
 
     @DeleteMapping("/delete")
-    public Result delete(@RequestParam Long id){
+    public Result delete(@RequestParam Long id,@RequestParam String computerId){
         log.info("删除购物车项：{}",id);
-        shoppingCartService.delete(id);
+        shoppingCartService.delete(id,computerId);
         return Result.success();
     }
 
     @GetMapping("/list")
-    public Result<List<ShoppingCartVO>> list(@RequestParam(required = false) Long userId){
+    public Result<List<ShoppingCartVO>> list(@RequestParam(required = false) String computerId){
         log.info("会员购物车列表");
-        List<ShoppingCartVO> list = shoppingCartService.list(userId);
+        List<ShoppingCartVO> list = shoppingCartService.list(computerId);
         return Result.success(list);
     }
 
     @DeleteMapping("/clear")
-    public Result clear(){
+    public Result clear(@RequestParam String computerId){
         log.info("清空购物车");
-        shoppingCartService.clear();
+        shoppingCartService.clear(computerId);
         return Result.success();
     }
 
