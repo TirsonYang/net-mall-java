@@ -28,4 +28,6 @@ public interface OrdersMapper {
     void updateStatusById(Long orderId, int status);
 
     String queryIdByOrderNum(String orderNum);
+
+    Long queryId(String orderNum, String computerId);
 }

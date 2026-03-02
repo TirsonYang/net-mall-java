@@ -206,8 +206,8 @@ public class OrdersServiceImpl implements OrdersService {
         request.setBizModel(model);
 //        String returnUrl = "http://localhost:16444/#/user/url?orderNum=" + entity.getOrderNum();
 //        request.setReturnUrl(returnUrl);
-        request.setReturnUrl("http://localhost:16444/#/user/product");
-        request.setNotifyUrl("http://2d106d06.r10.cpolar.top/user/orders/alipayNotify");
+        request.setReturnUrl("http://localhost:16444/#/user/getOrder?orderNum="+entity.getOrderNum());
+        request.setNotifyUrl("http://12f8746e.r7.cpolar.cn/user/orders/alipayNotify");
         // 第三方代调用模式下请设置app_auth_token
         // request.putOtherTextParam("app_auth_token", "<-- 请填写应用授权令牌 -->");
 
@@ -290,13 +290,13 @@ public class OrdersServiceImpl implements OrdersService {
 
         boolean isValid = dto.getComputerId().matches(regex);
         String computerId = null;
-        if(!isValid) {
+        if(!isValid){
             computerId = computerService.queryByNum(dto.getComputerId());
+        }else{
+            computerId = dto.getComputerId();
         }
-        String orderId = ordersMapper.queryIdByOrderNum(dto.getOrderNum());
-        return computerId==null? orderDetailService.queryByOrderNumAndComputerId(orderId,dto.getComputerId())
-                :orderDetailService.queryByOrderNumAndComputerId(orderId,computerId);
-
+        Long orderId = ordersMapper.queryId(dto.getOrderNum(),computerId);
+        return orderDetailService.getByOrderId(orderId);
     }
 
     private void sendMessage(OrdersEntity entity) {

@@ -84,7 +84,6 @@ public class OrdersController {
         return Result.success();
     }
 
-    // TODO 修改订单查询逻辑：先根据订单号和id查询orderid，根据orderid去detail表查细节
     @GetMapping("/getByOrderNum")
     public Result<List<OrderDetailVO>> getByOrderNum(@RequestParam String orderNum,
                                                      @RequestParam String computerId){

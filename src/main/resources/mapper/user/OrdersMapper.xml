@@ -42,4 +42,7 @@
     <select id="queryIdByOrderNum" resultType="java.lang.String">
         select id from `net-mall`.orders where order_num=#{orderNum}
     </select>
+    <select id="queryId" resultType="java.lang.Long">
+        select * from `net-mall`.orders where order_num=#{orderNum} and computer_id = #{computerId}
+    </select>
 </mapper>
