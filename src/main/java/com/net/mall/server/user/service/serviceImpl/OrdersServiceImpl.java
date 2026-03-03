@@ -169,6 +169,7 @@ public class OrdersServiceImpl implements OrdersService {
         AlipayTradePagePayModel model = new AlipayTradePagePayModel();
 
         // 设置商户订单号
+        System.out.println("订单号：----------------------->"+orderId);
         model.setOutTradeNo(String.valueOf(orderId));
 
         // 设置订单总金额
@@ -206,6 +207,7 @@ public class OrdersServiceImpl implements OrdersService {
         request.setBizModel(model);
 //        String returnUrl = "http://localhost:16444/#/user/url?orderNum=" + entity.getOrderNum();
 //        request.setReturnUrl(returnUrl);
+        System.out.println(entity.getOrderNum());
         request.setReturnUrl("http://localhost:16444/#/user/getOrder?orderNum="+entity.getOrderNum());
         request.setNotifyUrl("http://12f8746e.r7.cpolar.cn/user/orders/alipayNotify");
         // 第三方代调用模式下请设置app_auth_token
