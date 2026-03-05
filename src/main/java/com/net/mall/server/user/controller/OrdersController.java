@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController("userOrdersController")
 @RequestMapping("/user/orders")
@@ -83,6 +84,15 @@ public class OrdersController {
         // 返回success给支付宝，表示已收到通知
         return Result.success();
     }
+
+    @PostMapping("/wechatPayCreate/{orderId}")
+    public Result wechatCreate(@PathVariable Long orderId){
+        log.info("会员订单微信创建：{}",orderId);
+        //TODO 微信支付
+//        Map map=ordersService.wechatCreate(orderId);
+        return Result.success();
+    }
+
 
     @GetMapping("/getByOrderNum")
     public Result<List<OrderDetailVO>> getByOrderNum(@RequestParam String orderNum,

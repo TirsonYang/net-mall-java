@@ -9,15 +9,19 @@ import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.net.mall.common.config.WechatPayConfig;
 import com.net.mall.common.exception.BaseException;
 import com.net.mall.common.params.PageQuery;
 import com.net.mall.common.result.PageResult;
+import com.net.mall.common.utils.MoneyUtil;
 import com.net.mall.common.utils.OrderNumGenerateUtil;
 import com.net.mall.common.utils.SortUtil;
+import com.net.mall.common.utils.WXPayUtil;
 import com.net.mall.pojo.dto.DetailQueryDTO;
 import com.net.mall.pojo.dto.OrderDetailDTO;
 import com.net.mall.pojo.dto.OrdersCancelDTO;
 import com.net.mall.pojo.dto.OrdersDTO;
+import com.net.mall.pojo.entity.DirectAPIv3DirectNativePrepayResponse;
 import com.net.mall.pojo.entity.OrdersEntity;
 import com.net.mall.pojo.entity.ProductEntity;
 import com.net.mall.pojo.entity.TicketEntity;
@@ -27,16 +31,26 @@ import com.net.mall.pojo.vo.OrdersVO;
 import com.net.mall.server.user.mapper.OrdersMapper;
 import com.net.mall.server.user.service.*;
 import com.net.mall.server.websocket.WebSocketServer;
+import com.wechat.pay.java.service.payments.nativepay.model.Amount;
+import com.wechat.pay.java.service.payments.nativepay.model.Detail;
+import com.wechat.pay.java.service.payments.nativepay.model.PrepayRequest;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.math.BigDecimal;
+import java.security.Key;
+import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Slf4j
 @Service("userOrdersService")
 public class OrdersServiceImpl implements OrdersService {
 
@@ -55,6 +69,11 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
     private AlipayClient client;
+
+
+    //TODO 微信支付
+//    @Autowired
+//    private WechatPayConfig wechatPayConfig;
 
     @Override
     public List<OrdersVO> list(String orderNum, LocalDateTime startTime, LocalDateTime endTime, Long userId) {
@@ -209,7 +228,7 @@ public class OrdersServiceImpl implements OrdersService {
 //        request.setReturnUrl(returnUrl);
         System.out.println(entity.getOrderNum());
         request.setReturnUrl("http://localhost:16444/#/user/getOrder?orderNum="+entity.getOrderNum());
-        request.setNotifyUrl("http://12f8746e.r7.cpolar.cn/user/orders/alipayNotify");
+        request.setNotifyUrl("http://6db26d75.r10.cpolar.top/user/orders/alipayNotify");
         // 第三方代调用模式下请设置app_auth_token
         // request.putOtherTextParam("app_auth_token", "<-- 请填写应用授权令牌 -->");
 
@@ -301,6 +320,56 @@ public class OrdersServiceImpl implements OrdersService {
         return orderDetailService.getByOrderId(orderId);
     }
 
+    //TODO 微信支付
+//    private static final String wechatPayPublicKeyId="111";
+//    private PublicKey publicKey ;
+//    @Override
+//    public Map wechatCreate(Long orderId) {
+//
+//        List<OrderDetailVO> list = orderDetailService.getByOrderId(orderId);
+//        OrdersEntity entity = ordersMapper.getById(orderId);
+//
+//        WechatPayConfig wechatPayConfig = new WechatPayConfig();
+//
+//        PrepayRequest prepayRequest = new PrepayRequest();
+//        prepayRequest.setAppid(wechatPayConfig.appId);
+//        prepayRequest.setMchid(wechatPayConfig.merchantId);
+//        prepayRequest.setOutTradeNo(String.valueOf(entity.getId()));
+//        prepayRequest.setDescription(entity.getOrderNum());
+//        prepayRequest.setNotifyUrl("http://localhost:17818/user/orders/wechatNotify");
+//        Amount amount = new Amount();
+//        amount.setTotal(MoneyUtil.yuanToFen(entity.getAmount()));
+//        prepayRequest.setAmount(amount);
+//
+//        Detail detail= new Detail();
+//        List<com.wechat.pay.java.service.payments.nativepay.model.GoodsDetail> goodsList = new ArrayList<>();
+//        for(OrderDetailVO vo: list){
+//            com.wechat.pay.java.service.payments.nativepay.model.GoodsDetail goodsDetail =
+//                    new com.wechat.pay.java.service.payments.nativepay.model.GoodsDetail();
+//            goodsDetail.setGoodsName(vo.getProductName());
+//            goodsDetail.setQuantity(vo.getQuantity());
+//            goodsDetail.setMerchantGoodsId(String.valueOf(vo.getProductId()));
+//            goodsDetail.setUnitPrice(MoneyUtil.yuanToFen(vo.getAmount()));
+//            goodsList.add(goodsDetail);
+//        }
+//        detail.setGoodsDetail(goodsList);
+//
+//        prepayRequest.setDetail(detail);
+//
+//        // 调用下单方法，得到应答
+//        try {
+//            DirectAPIv3DirectNativePrepayResponse response = run(prepayRequest);
+//            log.info("下单应答：{}", response);
+//            HashMap<String, Object> map = new HashMap<>();
+//            map.put("code_url",response.getCodeUrl());
+//            map.put("orderNum",entity.getOrderNum());
+//            return map;
+//        } catch (Exception e) {
+//            log.error("下单异常：{}", e);
+//            throw new RuntimeException(e);
+//        }
+//    }
+
     private void sendMessage(OrdersEntity entity) {
         OrderMessageVO messageVO=new OrderMessageVO();
         messageVO.setContent("您有新的订单，请及时配送");
@@ -309,4 +378,45 @@ public class OrdersServiceImpl implements OrdersService {
         messageVO.setTimestamp(System.currentTimeMillis());
         webSocketServer.send(messageVO);
     }
+
+    // TODO 微信支付
+//    private DirectAPIv3DirectNativePrepayResponse run(PrepayRequest request) {
+//        String url = "https://api.mch.weixin.qq.com/v3/pay/transactions/native";
+//        String reqBody = WXPayUtil.toJson(request);
+//
+//        Request.Builder reqBuilder = new Request.Builder().url(url);
+//        reqBuilder.addHeader("Accept", "application/json");
+//        //TODO publicKey
+//        reqBuilder.addHeader("Wechatpay-Serial", wechatPayPublicKeyId);
+//        reqBuilder.addHeader("Authorization",
+//                WXPayUtil.buildAuthorization(wechatPayConfig.getMerchantId(),
+//                        wechatPayConfig.getMerchantSerialNo(),
+//                        WXPayUtil.loadPrivateKeyFromPath(wechatPayConfig.getPrivateKeyPath()),
+//                        "POST",
+//                        "/v3/pay/transactions/native",
+//                        reqBody));
+//        reqBuilder.addHeader("Content-Type", "application/json");
+//        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), reqBody);
+//        reqBuilder.method("POST", requestBody);
+//        Request httpRequest = reqBuilder.build();
+//
+//        // 发送HTTP请求
+//        OkHttpClient client = new OkHttpClient.Builder().build();
+//        try (Response httpResponse = client.newCall(httpRequest).execute()) {
+//            String respBody = WXPayUtil.extractBody(httpResponse);
+//            if (httpResponse.code() >= 200 && httpResponse.code() < 300) {
+//                // 2XX 成功，验证应答签名
+//                //TODO publicKey
+//                WXPayUtil.validateResponse(wechatPayPublicKeyId, publicKey,
+//                        httpResponse.headers(), respBody);
+//
+//                // 从HTTP应答报文构建返回数据
+//                return WXPayUtil.fromJson(respBody, DirectAPIv3DirectNativePrepayResponse.class);
+//            } else {
+//                throw new WXPayUtil.ApiException(httpResponse.code(), respBody, httpResponse.headers());
+//            }
+//        } catch (IOException e) {
+//            throw new UncheckedIOException("Sending request to " + "/v3/pay/transactions/native" + " failed.", e);
+//        }
+//    }
 }

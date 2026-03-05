@@ -12,6 +12,7 @@ import com.net.mall.pojo.vo.OrdersVO;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 
 public interface OrdersService {
@@ -32,4 +33,7 @@ public interface OrdersService {
     void handleAlipayNotify(HttpServletRequest request);
 
     List<OrderDetailVO> getByOrderNum(DetailQueryDTO dto);
+
+    // TODO 微信支付
+//    Map wechatCreate(Long orderId);
 }
