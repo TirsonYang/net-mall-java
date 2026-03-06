@@ -93,6 +93,14 @@ public class OrdersController {
         return Result.success();
     }
 
+    @PostMapping("/wechatPayNotify")
+    public Result wechatNotify(HttpServletRequest request) {
+        log.info("会员订单微信回调——————————————————————————————————触发");
+        //TODO 微信支付
+//        ordersService.handleWechatNotify(request);
+        return Result.success();
+    }
+
 
     @GetMapping("/getByOrderNum")
     public Result<List<OrderDetailVO>> getByOrderNum(@RequestParam String orderNum,

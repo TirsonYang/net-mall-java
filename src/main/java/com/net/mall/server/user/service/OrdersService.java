@@ -34,6 +34,8 @@ public interface OrdersService {
 
     List<OrderDetailVO> getByOrderNum(DetailQueryDTO dto);
 
+
+
     // TODO 微信支付
 //    Map wechatCreate(Long orderId);
 }
